@@ -1,0 +1,68 @@
+{
+  "common": {
+    "welcome": "Bienvenue",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "back": "Retour"
+  },
+  "nav": {
+    "home": "Accueil",
+    "products": "Produits",
+    "orders": "Commandes",
+    "admin": "Administration"
+  },
+  "home": {
+    "title": "Simplifiez votre vie quotidienne",
+    "subtitle": "Découvrez notre sélection de produits essentiels pour rendre votre maison plus pratique et agréable",
+    "tagline": "Tout ce dont vous avez besoin pour votre maison",
+    "cta": "Découvrir nos produits",
+    "ctaSecondary": "Explorer les catégories",
+    "feature1Title": "Cuisine",
+    "feature1Desc": "Accessoires et ustensiles pratiques pour faciliter votre cuisine au quotidien",
+    "feature2Title": "Salon",
+    "feature2Desc": "Produits décoratifs et fonctionnels pour créer un espace de vie confortable",
+    "feature3Title": "Tous les espaces",
+    "feature3Desc": "Des solutions pour chaque pièce de votre maison, du salon à la chambre",
+    "whyTitle": "Pourquoi choisir Homeva ?",
+    "why1Title": "Qualité garantie",
+    "why1Desc": "Des produits sélectionnés pour leur qualité et leur durabilité",
+    "why2Title": "Livraison rapide",
+    "why2Desc": "Recevez vos commandes rapidement et en toute sécurité",
+    "why3Title": "Prix compétitifs",
+    "why3Desc": "Des prix accessibles pour tous les budgets",
+    "categoriesTitle": "Nos catégories",
+    "categoriesSubtitle": "Trouvez exactement ce dont vous avez besoin"
+  },
+  "products": {
+    "title": "Produits",
+    "noProducts": "Aucun produit disponible",
+    "price": "Prix",
+    "currency": "TND",
+    "currencySymbol": "د.ت",
+    "addToCart": "Ajouter au panier",
+    "details": "Détails",
+    "notFound": "Produit non trouvé",
+    "backToList": "Retour à la liste",
+    "inStock": "en stock",
+    "outOfStock": "Rupture de stock",
+    "addToWishlist": "Ajouter aux favoris",
+    "features": "Caractéristiques",
+    "feature1": "Livraison gratuite",
+    "feature2": "Garantie qualité",
+    "feature3": "Retour sous 30 jours"
+  },
+  "orders": {
+    "title": "Commandes",
+    "create": "Créer une commande",
+    "noOrders": "Aucune commande",
+    "status": "Statut"
+  }
+}
+

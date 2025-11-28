@@ -1,0 +1,68 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "back": "Back"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "orders": "Orders",
+    "admin": "Administration"
+  },
+  "home": {
+    "title": "Simplify your daily life",
+    "subtitle": "Discover our selection of essential products to make your home more practical and enjoyable",
+    "tagline": "Everything you need for your home",
+    "cta": "Discover our products",
+    "ctaSecondary": "Explore categories",
+    "feature1Title": "Kitchen",
+    "feature1Desc": "Practical accessories and utensils to make your daily cooking easier",
+    "feature2Title": "Living Room",
+    "feature2Desc": "Decorative and functional products to create a comfortable living space",
+    "feature3Title": "All Spaces",
+    "feature3Desc": "Solutions for every room in your home, from living room to bedroom",
+    "whyTitle": "Why choose Homeva?",
+    "why1Title": "Guaranteed quality",
+    "why1Desc": "Products selected for their quality and durability",
+    "why2Title": "Fast delivery",
+    "why2Desc": "Receive your orders quickly and securely",
+    "why3Title": "Competitive prices",
+    "why3Desc": "Affordable prices for all budgets",
+    "categoriesTitle": "Our categories",
+    "categoriesSubtitle": "Find exactly what you need"
+  },
+  "products": {
+    "title": "Products",
+    "noProducts": "No products available",
+    "price": "Price",
+    "currency": "TND",
+    "currencySymbol": "د.ت",
+    "addToCart": "Add to cart",
+    "details": "Details",
+    "notFound": "Product not found",
+    "backToList": "Back to list",
+    "inStock": "in stock",
+    "outOfStock": "Out of stock",
+    "addToWishlist": "Add to favorites",
+    "features": "Features",
+    "feature1": "Free delivery",
+    "feature2": "Quality guarantee",
+    "feature3": "30-day return"
+  },
+  "orders": {
+    "title": "Orders",
+    "create": "Create order",
+    "noOrders": "No orders",
+    "status": "Status"
+  }
+}
+
