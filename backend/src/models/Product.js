@@ -14,14 +14,14 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  image: {
-    type: String,
-    default: ""
-  },
+  images: [{ type: String }],
+  
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }
+
 });
 
 const Product = mongoose.model("Product", productSchema);
