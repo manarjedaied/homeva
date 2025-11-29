@@ -18,9 +18,11 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
   product: {
-    type: String,
-    required: true
-  },
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Product",
+  required: true
+},
+
   quantity: {
     type: Number,
     default: 1
