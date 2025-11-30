@@ -54,7 +54,7 @@
     "outOfStock": "نفد المخزون",
     "addToWishlist": "إضافة إلى المفضلة",
     "features": "المميزات",
-    "feature1": "توصيل مجاني",
+    "feature1": "توصيل إلى جميع أنحاء تونس",
     "feature2": "ضمان الجودة",
     "feature3": "إرجاع خلال 30 يوماً"
   },
@@ -62,7 +62,25 @@
     "title": "الطلبات",
     "create": "إنشاء طلب",
     "noOrders": "لا توجد طلبات",
-    "status": "الحالة"
+    "status": "الحالة",
+    "orderForm": "نموذج الطلب",
+    "clientName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "quantity": "الكمية",
+    "submitOrder": "تأكيد الطلب",
+    "orderSuccess": "تم إرسال الطلب بنجاح!",
+    "orderError": "خطأ في إرسال الطلب",
+    "pleaseFillAll": "يرجى ملء جميع الحقول",
+    "promo2Products": "منتجين = -5%",
+    "promo3Products": "3 منتجات = توصيل مجاني",
+    "price": "السعر",
+    "delivery": "التوصيل",
+    "total": "المجموع",
+    "freeDelivery": "مجاني",
+    "discount": "الخصم",
+    "youSave": "توفر"
   }
 }
 
