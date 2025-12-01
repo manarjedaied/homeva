@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { productAPI } from '../services/api';
+import { productAPI, orderAPI } from '../services/api';
 import { Product } from '../types';
 import { formatPrice } from '../utils/formatPrice';
 
@@ -112,6 +112,14 @@ export const ProductDetails: React.FC = () => {
   const [product, setProduct] = useState<(Product & { images?: string[] }) | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [orderFormData, setOrderFormData] = useState({
+    clientName: '',
+    phone: '',
+    address: '',
+    quantity: 1,
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [orderMessage, setOrderMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -165,6 +173,19 @@ export const ProductDetails: React.FC = () => {
   const images = product.images || (product.image ? [product.image] : []);
   const displayImages = images.length >= 5 ? images.slice(0, 5) : images;
 
+  // Calculs pour le récapitulatif
+  const DELIVERY_FEE = 7; // Frais de livraison en TND
+  const DISCOUNT_PERCENTAGE = 5; // Remise de 5% UNIQUEMENT pour 2 produits
+  const unitPrice = product.price;
+  const quantity = orderFormData.quantity;
+  const subtotal = unitPrice * quantity;
+  const hasDiscount = quantity === 2; // Remise uniquement pour exactement 2 produits
+  const discountAmount = hasDiscount ? (subtotal * DISCOUNT_PERCENTAGE) / 100 : 0;
+  const priceAfterDiscount = subtotal - discountAmount;
+  const isFreeDelivery = quantity >= 3;
+  const deliveryFee = isFreeDelivery ? 0 : DELIVERY_FEE;
+  const total = priceAfterDiscount + deliveryFee;
+
   return (
     <div className="product-details-page">
       <button onClick={() => navigate('/products')} className="back-button">
@@ -203,15 +224,206 @@ export const ProductDetails: React.FC = () => {
           </div>
           <p className="product-description-full">{product.description}</p>
 
+          <div className="order-form-container">
+              <h3>{t('orders.orderForm')}</h3>
+              {orderMessage && (
+                <div className={`order-message ${orderMessage.type}`}>
+                  {orderMessage.text}
+                </div>
+              )}
+              <form 
+                className="order-form"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setSubmitting(true);
+                  setOrderMessage(null);
+                  
+                  // Validation
+                  if (!orderFormData.clientName || !orderFormData.phone || !orderFormData.address) {
+                    setOrderMessage({ type: 'error', text: t('orders.pleaseFillAll') });
+                    setSubmitting(false);
+                    return;
+                  }
+
+                  try {
+                    await orderAPI.create({
+                      clientName: orderFormData.clientName,
+                      email: '', // Email non requis dans le formulaire mais requis par le backend
+                      phone: orderFormData.phone,
+                      address: orderFormData.address,
+                      product: product._id,
+                      quantity: orderFormData.quantity,
+                    } as any);
+                    
+                    setOrderMessage({ type: 'success', text: t('orders.orderSuccess') });
+                    // Reset form after 2 seconds
+                    setTimeout(() => {
+                      setOrderFormData({
+                        clientName: '',
+                        phone: '',
+                        address: '',
+                        quantity: 1,
+                      });
+                      setOrderMessage(null);
+                    }, 2000);
+                  } catch (error) {
+                    setOrderMessage({ type: 'error', text: t('orders.orderError') });
+                  } finally {
+                    setSubmitting(false);
+                  }
+                }}
+              >
+                <div className="form-group">
+                  <label htmlFor="clientName">{t('orders.clientName')} *</label>
+                  <input
+                    type="text"
+                    id="clientName"
+                    value={orderFormData.clientName}
+                    onChange={(e) => setOrderFormData({ ...orderFormData, clientName: e.target.value })}
+                    required
+                  />
+                </div>
 
 
-          <div className="product-actions">
-            <button className="btn-add-to-cart" disabled={product.stock === 0}>
-              {t('products.addToCart')}
+
+                <div className="form-group">
+                  <label htmlFor="phone">{t('orders.phone')} *</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={orderFormData.phone}
+                    onChange={(e) => setOrderFormData({ ...orderFormData, phone: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="address">{t('orders.address')} *</label>
+                  <textarea
+                    id="address"
+                    value={orderFormData.address}
+                    onChange={(e) => setOrderFormData({ ...orderFormData, address: e.target.value })}
+                    required
+                    rows={3}
+                  />
+                </div>
+
+                <div className="promo-section">
+                  <div className="promo-item">
+                    <span className="promo-icon">🎁</span>
+                    <span className="promo-text">{t('orders.promo2Products')}</span>
+                  </div>
+                  <div className="promo-item">
+                    <span className="promo-icon">🚚</span>
+                    <span className="promo-text">{t('orders.promo3Products')}</span>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="quantity">{t('orders.quantity')}</label>
+                  <div className="quantity-controls">
+                    <button
+                      type="button"
+                      className="quantity-btn"
+                      onClick={() => {
+                        if (orderFormData.quantity > 1) {
+                          setOrderFormData({ ...orderFormData, quantity: orderFormData.quantity - 1 });
+                        }
+                      }}
+                      disabled={orderFormData.quantity <= 1}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      id="quantity"
+                      min="1"
+                      max={product.stock || 999}
+                      value={orderFormData.quantity}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 1;
+                        const maxValue = product.stock || 999;
+                        setOrderFormData({ ...orderFormData, quantity: Math.min(Math.max(1, value), maxValue) });
+                      }}
+                      className="quantity-input"
+                    />
+                    <button
+                      type="button"
+                      className="quantity-btn"
+                      onClick={() => {
+                        const maxValue = product.stock || 999;
+                        if (orderFormData.quantity < maxValue) {
+                          setOrderFormData({ ...orderFormData, quantity: orderFormData.quantity + 1 });
+                        }
+                      }}
+                      disabled={orderFormData.quantity >= (product.stock || 999)}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="form-actions">
+                  <button 
+                    type="submit" 
+                    className="btn-submit-order"
+                    disabled={submitting}
+                  >
+                    {submitting ? t('common.loading') : t('orders.submitOrder')}
             </button>
-            <button className="btn-wishlist">
-              ♡ {t('products.addToWishlist')}
+                  <button 
+                    type="button" 
+                    className="btn-cancel-order"
+                    onClick={() => {
+                      setOrderFormData({
+                        clientName: '',
+                        phone: '',
+                        address: '',
+                        quantity: 1,
+                      });
+                      setOrderMessage(null);
+                    }}
+                    disabled={submitting}
+                  >
+                    {t('common.cancel')}
             </button>
+                </div>
+
+                <div className="price-summary-section">
+                  <div className="price-summary-row">
+                    <span className="price-summary-label">{t('orders.price')} {quantity > 1 && `(${quantity}x)`}</span>
+                    <span className="price-summary-value">{formatPrice(subtotal)}</span>
+                  </div>
+                  {hasDiscount && (
+                    <div className="price-summary-row price-summary-discount">
+                      <span className="price-summary-label">
+                        {t('orders.discount')} (-{DISCOUNT_PERCENTAGE}%)
+                        <span className="save-badge">{t('orders.youSave')}: {formatPrice(discountAmount)}</span>
+                      </span>
+                      <span className="price-summary-value discount-value">-{formatPrice(discountAmount)}</span>
+                    </div>
+                  )}
+                  <div className="price-summary-row">
+                    <span className="price-summary-label">
+                      {isFreeDelivery ? (
+                        <>
+                          {t('orders.delivery')}
+                          <span className="free-delivery-indicator"> ✨ {t('orders.freeDelivery')}</span>
+                        </>
+                      ) : (
+                        t('orders.delivery')
+                      )}
+                    </span>
+                    <span className={`price-summary-value ${isFreeDelivery ? 'free-delivery' : ''}`}>
+                      {isFreeDelivery ? t('orders.freeDelivery') : formatPrice(deliveryFee)}
+                    </span>
+                  </div>
+                  <div className="price-summary-row price-summary-total">
+                    <span className="price-summary-label">{t('orders.total')}</span>
+                    <span className="price-summary-value">{formatPrice(total)}</span>
+                  </div>
+                </div>
+              </form>
           </div>
 
           <div className="product-features">

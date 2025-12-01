@@ -54,7 +54,7 @@
     "outOfStock": "Out of stock",
     "addToWishlist": "Add to favorites",
     "features": "Features",
-    "feature1": "Free delivery",
+    "feature1": "Delivery throughout Tunisia",
     "feature2": "Quality guarantee",
     "feature3": "30-day return"
   },
@@ -62,7 +62,25 @@
     "title": "Orders",
     "create": "Create order",
     "noOrders": "No orders",
-    "status": "Status"
+    "status": "Status",
+    "orderForm": "Order form",
+    "clientName": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "quantity": "Quantity",
+    "submitOrder": "Place order",
+    "orderSuccess": "Order placed successfully!",
+    "orderError": "Error placing order",
+    "pleaseFillAll": "Please fill in all fields",
+    "promo2Products": "2 products = -5%",
+    "promo3Products": "3 products = Free delivery",
+    "price": "Price",
+    "delivery": "Delivery",
+    "total": "Total",
+    "freeDelivery": "Free",
+    "discount": "Discount",
+    "youSave": "You save"
   }
 }
 
