@@ -174,12 +174,12 @@ export const ProductDetails: React.FC = () => {
   const displayImages = images.length >= 5 ? images.slice(0, 5) : images;
 
   // Calculs pour le récapitulatif
-  const DELIVERY_FEE = 8; // Frais de livraison en TND
-  const DISCOUNT_PERCENTAGE = 5; // Remise de 5% pour 2 produits ou plus
+  const DELIVERY_FEE = 7; // Frais de livraison en TND
+  const DISCOUNT_PERCENTAGE = 5; // Remise de 5% UNIQUEMENT pour 2 produits
   const unitPrice = product.price;
   const quantity = orderFormData.quantity;
   const subtotal = unitPrice * quantity;
-  const hasDiscount = quantity >= 2;
+  const hasDiscount = quantity === 2; // Remise uniquement pour exactement 2 produits
   const discountAmount = hasDiscount ? (subtotal * DISCOUNT_PERCENTAGE) / 100 : 0;
   const priceAfterDiscount = subtotal - discountAmount;
   const isFreeDelivery = quantity >= 3;
