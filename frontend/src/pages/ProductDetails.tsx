@@ -176,7 +176,9 @@ export const ProductDetails: React.FC = () => {
   // Calculs pour le récapitulatif
   const DELIVERY_FEE = 7; // Frais de livraison en TND
   const DISCOUNT_PERCENTAGE = 5; // Remise de 5% UNIQUEMENT pour 2 produits
-  const unitPrice = product.price;
+  const PRODUCT_DISCOUNT_PERCENTAGE = 25; // Remise affichée sur le produit (20% ou 30%)
+  const unitPrice = product.price; // Prix actuel (après remise)
+  const originalPrice = unitPrice / (1 - PRODUCT_DISCOUNT_PERCENTAGE / 100); // Calcul du prix original
   const quantity = orderFormData.quantity;
   const subtotal = unitPrice * quantity;
   const hasDiscount = quantity === 2; // Remise uniquement pour exactement 2 produits
@@ -219,8 +221,16 @@ export const ProductDetails: React.FC = () => {
             <span className="product-category-badge">{product.category}</span>
           )}
           <h1 className="product-title">{product.name}</h1>
-          <div className="product-price-large">
-            {formatPrice(product.price)}
+          <div className="product-price-container">
+            <div className="product-price-original">
+              {formatPrice(originalPrice)}
+            </div>
+            <div className="product-discount-badge">
+              -{PRODUCT_DISCOUNT_PERCENTAGE}%
+            </div>
+            <div className="product-price-large">
+              {formatPrice(product.price)}
+            </div>
           </div>
           <p className="product-description-full">{product.description}</p>
 
