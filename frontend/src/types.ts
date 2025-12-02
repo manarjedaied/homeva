@@ -4,12 +4,16 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  image?: string;
-  category?: string;
-  stock?: number;
+  images?: string[];      // vient du backend
+  category?: {
+    _id: string;
+    name: string;
+  } | string;            // si non populé
+  pourcentagePromo?: number;
+  stockLimite?: boolean;
   createdAt?: string;
-  updatedAt?: string;
 }
+
 
 // Types pour les commandes
 export interface Order {

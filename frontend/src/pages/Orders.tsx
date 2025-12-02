@@ -48,9 +48,6 @@ export const Orders: React.FC = () => {
                 <strong>Client:</strong> {order.customerName}
               </p>
               <p>
-                <strong>Email:</strong> {order.customerEmail}
-              </p>
-              <p>
                 <strong>{t('orders.status')}:</strong> {order.status}
               </p>
               <p>
