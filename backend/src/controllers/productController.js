@@ -13,7 +13,7 @@ export const getProducts = async (req, res) => {
 // GET /api/products/:id
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("category");
     if (!product) return res.status(404).json({ message: "Produit non trouvé" });
     res.json(product);
   } catch (error) {
@@ -24,9 +24,16 @@ export const getProductById = async (req, res) => {
 // POST /api/products
 export const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category } = req.body;
+    const {
+      name,
+      price,
+      description,
+      category,
+      pourcentagePromo,
+      stockLimite
+    } = req.body;
 
-    // Récupérer les fichiers uploadés
+    // Images uploadées
     const images = req.files?.map(file => `/uploads/${file.filename}`) || [];
 
     const product = new Product({
@@ -34,6 +41,8 @@ export const addProduct = async (req, res) => {
       price,
       description,
       category,
+      pourcentagePromo,
+      stockLimite,
       images
     });
 
@@ -48,9 +57,11 @@ export const addProduct = async (req, res) => {
 // PUT /api/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    let updatedData = { ...req.body };
+    let updatedData = {
+      ...req.body
+    };
 
-    // Si l'utilisateur upload de nouvelles images
+    // Si nouvelles images uploadées
     if (req.files && req.files.length > 0) {
       updatedData.images = req.files.map(file => `/uploads/${file.filename}`);
     }
@@ -64,6 +75,7 @@ export const updateProduct = async (req, res) => {
     if (!updatedProduct) return res.status(404).json({ message: "Produit non trouvé" });
 
     res.json(updatedProduct);
+
   } catch (error) {
     res.status(400).json({ message: "Erreur mise à jour produit", error: error.message });
   }
@@ -78,10 +90,9 @@ export const deleteProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
 };
 
-// Récupérer les produits d'une catégorie
+// GET products by category
 export const getProductsByCategory = async (req, res) => {
   const { categoryId } = req.params;
   try {
@@ -91,4 +102,3 @@ export const getProductsByCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
