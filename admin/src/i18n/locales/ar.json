@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "مرحبا",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "back": "رجوع",
+    "actions": "إجراءات"
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "products": "المنتجات",
+      "orders": "الطلبات",
+      "logout": "تسجيل الخروج"
+    },
+    "login": {
+      "title": "تسجيل دخول المدير",
+      "subtitle": "الوصول إلى لوحة الإدارة",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "error": "خطأ في تسجيل الدخول"
+    },
+    "dashboard": {
+      "title": "لوحة التحكم",
+      "totalProducts": "إجمالي المنتجات",
+      "totalOrders": "إجمالي الطلبات",
+      "pendingOrders": "الطلبات المعلقة",
+      "completedOrders": "الطلبات المكتملة"
+    },
+    "products": {
+      "title": "إدارة المنتجات",
+      "add": "إضافة منتج",
+      "edit": "تعديل المنتج",
+      "name": "الاسم",
+      "description": "الوصف",
+      "price": "السعر",
+      "category": "الفئة",
+      "stock": "المخزون",
+      "image": "الصورة (رابط)",
+      "confirmDelete": "هل أنت متأكد من حذف هذا المنتج؟"
+    },
+    "orders": {
+      "title": "إدارة الطلبات",
+      "clientName": "العميل",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "product": "المنتج",
+      "quantity": "الكمية",
+      "status": "الحالة",
+      "complete": "إكمال"
+    }
+  },
+  "products": {
+    "currencySymbol": "د.ت"
+  }
+}
+

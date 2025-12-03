@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "back": "Back",
+    "actions": "Actions"
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "orders": "Orders",
+      "logout": "Logout"
+    },
+    "login": {
+      "title": "Admin Login",
+      "subtitle": "Access your administration panel",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "error": "Login error"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "totalProducts": "Total Products",
+      "totalOrders": "Total Orders",
+      "pendingOrders": "Pending Orders",
+      "completedOrders": "Completed Orders"
+    },
+    "products": {
+      "title": "Products Management",
+      "add": "Add product",
+      "edit": "Edit product",
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "category": "Category",
+      "stock": "Stock",
+      "image": "Image (URL)",
+      "confirmDelete": "Are you sure you want to delete this product?"
+    },
+    "orders": {
+      "title": "Orders Management",
+      "clientName": "Client",
+      "email": "Email",
+      "phone": "Phone",
+      "product": "Product",
+      "quantity": "Quantity",
+      "status": "Status",
+      "complete": "Complete"
+    }
+  },
+  "products": {
+    "currencySymbol": "د.ت"
+  }
+}
+
