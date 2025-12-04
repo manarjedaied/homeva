@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { adminOrderAPI } from '../services/api';
-import { Order } from '../types';
+import { Order, Product } from '../types';
 
 export const AdminOrders: React.FC = () => {
   const { t } = useTranslation();
@@ -66,7 +66,11 @@ export const AdminOrders: React.FC = () => {
                 <td>{order.clientName}</td>
                 <td>{order.email || '-'}</td>
                 <td>{order.phone}</td>
-                <td>{order.product}</td>
+                <td>
+                  {typeof order.product === 'object' && order.product !== null
+                    ? (order.product as Product).name
+                    : order.product}
+                </td>
                 <td>{order.quantity}</td>
                 <td>
                   <select

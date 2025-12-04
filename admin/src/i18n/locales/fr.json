@@ -11,13 +11,16 @@
     "add": "Ajouter",
     "search": "Rechercher",
     "back": "Retour",
-    "actions": "Actions"
+    "actions": "Actions",
+    "yes": "Oui",
+    "no": "Non"
   },
   "admin": {
     "nav": {
       "dashboard": "Tableau de bord",
       "products": "Produits",
       "orders": "Commandes",
+      "categories": "Catégories",
       "logout": "Déconnexion"
     },
     "login": {
@@ -44,8 +47,37 @@
       "price": "Prix",
       "category": "Catégorie",
       "stock": "Stock",
-      "image": "Image (URL)",
+      "image": "Images",
+      "imageHint": "Formats acceptés : JPG, PNG, WEBP (max 5 Mo)",
+      "selectCategory": "Sélectionner une catégorie",
+      "noCategories": "Aucune catégorie disponible pour le moment",
+      "categoryHelp": "Ajoutez au moins une catégorie pour activer la sélection.",
+      "addCategory": "Ajouter une catégorie",
+      "newCategoryPlaceholder": "Nouvelle catégorie",
+      "pourcentagePromo": "Pourcentage de promotion (%)",
+      "stockLimite": "Stock limité",
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+    },
+    "categories": {
+      "title": "Catégories produits",
+      "subtitle": "Organisez votre catalogue par familles et activez/désactivez-les facilement.",
+      "addTitle": "Créer une catégorie",
+      "editTitle": "Modifier la catégorie",
+      "newCategory": "Nouvelle catégorie",
+      "name": "Nom",
+      "description": "Description",
+      "isActive": "Catégorie active",
+      "status": "Statut",
+      "products": "Produits",
+      "empty": "Aucune catégorie pour le moment.",
+      "confirmDelete": "Supprimer définitivement cette catégorie ?",
+      "disable": "Désactiver",
+      "enable": "Activer",
+      "addCategory": "Ajouter une catégorie",
+      "noCategories": "Aucune catégorie disponible pour le moment",
+      "categoryHelp": "Ajoutez au moins une catégorie pour activer la sélection.",
+      "newCategoryPlaceholder": "Nom de la nouvelle catégorie",
+      "inactiveLabel": "Inactif"
     },
     "orders": {
       "title": "Gestion des Commandes",

@@ -11,13 +11,16 @@
     "add": "Add",
     "search": "Search",
     "back": "Back",
-    "actions": "Actions"
+    "actions": "Actions",
+    "yes": "Yes",
+    "no": "No"
   },
   "admin": {
     "nav": {
       "dashboard": "Dashboard",
       "products": "Products",
       "orders": "Orders",
+      "categories": "Categories",
       "logout": "Logout"
     },
     "login": {
@@ -27,6 +30,27 @@
       "password": "Password",
       "submit": "Login",
       "error": "Login error"
+    },
+    "categories": {
+      "title": "Product categories",
+      "subtitle": "Group your catalog by families and toggle them on/off easily.",
+      "addTitle": "Create a category",
+      "editTitle": "Edit category",
+      "newCategory": "New category",
+      "name": "Name",
+      "description": "Description",
+      "isActive": "Category is active",
+      "status": "Status",
+      "products": "Products",
+      "empty": "No categories yet.",
+      "confirmDelete": "Delete this category permanently?",
+      "disable": "Disable",
+      "enable": "Enable",
+      "addCategory": "Add a category",
+      "noCategories": "No categories available yet",
+      "categoryHelp": "Add at least one category to enable selection.",
+      "newCategoryPlaceholder": "New category name",
+      "inactiveLabel": "Inactive"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -44,7 +68,15 @@
       "price": "Price",
       "category": "Category",
       "stock": "Stock",
-      "image": "Image (URL)",
+      "image": "Images",
+      "imageHint": "Accepted formats: JPG, PNG, WEBP (max 5MB)",
+      "selectCategory": "Select a category",
+      "noCategories": "No categories available yet",
+      "categoryHelp": "Add at least one category to enable selection.",
+      "addCategory": "Add category",
+      "newCategoryPlaceholder": "New category name",
+      "pourcentagePromo": "Discount (%)",
+      "stockLimite": "Limited stock",
       "confirmDelete": "Are you sure you want to delete this product?"
     },
     "orders": {

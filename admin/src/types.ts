@@ -1,12 +1,25 @@
 // Types pour les produits
+export interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  productCount?: number;
+}
+
 export interface Product {
   _id: string;
   name: string;
   description: string;
   price: number;
   image?: string;
-  category?: string;
-  stock?: number;
+  images?: string[];
+  category?: string | Category | null;
+  pourcentagePromo?: number;
+  stockLimite?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -18,7 +31,7 @@ export interface Order {
   email: string;
   phone: string;
   address: string;
-  product: string;
+  product: string | Product;
   quantity: number;
   status: 'Nouveau' | 'En cours' | 'Terminé';
   createdAt?: string;
