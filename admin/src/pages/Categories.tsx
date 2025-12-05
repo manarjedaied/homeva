@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { adminCategoryAPI } from '../services/api';
 import { Category } from '../types';
+import { EditIcon, DeleteIcon } from '../components/icons/ActionIcons';
 
 type CategoryForm = {
   name: string;
@@ -134,25 +135,32 @@ export const AdminCategories: React.FC = () => {
         <h2>{editingCategory ? t('admin.categories.editTitle') : t('admin.categories.addTitle')}</h2>
         <form className="category-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>{t('admin.categories.name')}</label>
+            <label htmlFor="category-name">{t('admin.categories.name')}</label>
             <input
+              id="category-name"
               type="text"
+              className="admin-form-input"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
+              placeholder={'Nom de la catégorie'}
             />
           </div>
           <div className="form-group">
-            <label>{t('admin.categories.description')}</label>
+            <label htmlFor="category-description">{t('admin.categories.description')}</label>
             <textarea
+              id="category-description"
+              className="admin-form-textarea"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={3}
+              rows={4}
+              placeholder={'Description de la catégorie (optionnel)'}
             />
           </div>
           <div className="form-group checkbox-group">
-            <label>
+            <label htmlFor="category-active">
               <input
+                id="category-active"
                 type="checkbox"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
@@ -216,17 +224,26 @@ export const AdminCategories: React.FC = () => {
                   </td>
                   <td>
                     <div className="table-actions">
-                      <button className="admin-btn-edit" onClick={() => handleEdit(category)}>
-                        {t('common.edit')}
+                      <button 
+                        className="admin-btn-edit" 
+                        onClick={() => handleEdit(category)}
+                        title={t('common.edit')}
+                      >
+                        <EditIcon size={18} />
                       </button>
                       <button
                         className="admin-btn-secondary"
                         onClick={() => handleToggleActive(category)}
+                        title={category.isActive ? t('admin.categories.disable') : t('admin.categories.enable')}
                       >
                         {category.isActive ? t('admin.categories.disable') : t('admin.categories.enable')}
                       </button>
-                      <button className="admin-btn-delete" onClick={() => handleDelete(category)}>
-                        {t('common.delete')}
+                      <button 
+                        className="admin-btn-delete" 
+                        onClick={() => handleDelete(category)}
+                        title={t('common.delete')}
+                      >
+                        <DeleteIcon size={18} />
                       </button>
                     </div>
                   </td>

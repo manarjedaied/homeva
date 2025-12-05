@@ -1,6 +1,19 @@
 import { Product, Order, Category } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
+// Fonction pour construire l'URL complète d'une image
+export const getImageUrl = (imagePath: string | undefined | null): string => {
+  if (!imagePath) return '';
+  // Si l'URL est déjà complète (commence par http), la retourner telle quelle
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  // Utiliser le chemin relatif pour que le proxy Vite le gère
+  // Le proxy redirigera automatiquement vers le backend
+  return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+};
 
 // Fonction utilitaire pour les appels API
 async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise<T> {

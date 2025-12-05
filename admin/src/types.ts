@@ -20,6 +20,9 @@ export interface Product {
   category?: string | Category | null;
   pourcentagePromo?: number;
   stockLimite?: boolean;
+  stockTotal?: number;
+  orderedQuantity?: number;
+  remainingStock?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }

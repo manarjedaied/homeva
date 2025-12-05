@@ -30,6 +30,13 @@ const productSchema = new mongoose.Schema({
     default: false
   },
 
+  // Stock total initial
+  stockTotal: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+
   createdAt: {
     type: Date,
     default: Date.now
