@@ -6,6 +6,7 @@ import { AdminDashboard } from './pages/Dashboard';
 import { AdminProducts } from './pages/Products';
 import { AdminCategories } from './pages/Categories';
 import { AdminOrders } from './pages/Orders';
+import { AdminSettings } from './pages/Settings';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import './i18n/config';
 import './styles/global.css';
@@ -48,6 +49,13 @@ function App() {
             <ProtectedRoute>
               <AdminLayout>
                 <AdminOrders />
+              </AdminLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/settings" element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminSettings />
               </AdminLayout>
             </ProtectedRoute>
           } />

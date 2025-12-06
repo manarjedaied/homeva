@@ -37,6 +37,39 @@ const productSchema = new mongoose.Schema({
     min: 0
   },
 
+  // ===== PARAMÈTRES DE REMISE ET LIVRAISON (spécifiques au produit) =====
+  // Si null/undefined, utilise les paramètres globaux
+  
+  // Remise quantité
+  quantityDiscountEnabled: {
+    type: Boolean,
+    default: null // null = utilise les paramètres globaux
+  },
+  quantityDiscountMinQuantity: {
+    type: Number,
+    default: null
+  },
+  quantityDiscountPercentage: {
+    type: Number,
+    default: null
+  },
+  
+  // Livraison gratuite
+  freeDeliveryEnabled: {
+    type: Boolean,
+    default: null
+  },
+  freeDeliveryMinQuantity: {
+    type: Number,
+    default: null
+  },
+  
+  // Frais de livraison spécifique (optionnel)
+  customDeliveryFee: {
+    type: Number,
+    default: null // null = utilise les paramètres globaux
+  },
+
   createdAt: {
     type: Date,
     default: Date.now

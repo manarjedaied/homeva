@@ -11,6 +11,13 @@ export interface Product {
   } | string;            // si non populé
   pourcentagePromo?: number;
   stockLimite?: boolean;
+  // Paramètres de remise et livraison (spécifiques au produit)
+  quantityDiscountEnabled?: boolean | null;
+  quantityDiscountMinQuantity?: number | null;
+  quantityDiscountPercentage?: number | null;
+  freeDeliveryEnabled?: boolean | null;
+  freeDeliveryMinQuantity?: number | null;
+  customDeliveryFee?: number | null;
   createdAt?: string;
 }
 

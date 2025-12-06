@@ -23,6 +23,13 @@ export interface Product {
   stockTotal?: number;
   orderedQuantity?: number;
   remainingStock?: number | null;
+  // Paramètres de remise et livraison (spécifiques au produit)
+  quantityDiscountEnabled?: boolean | null;
+  quantityDiscountMinQuantity?: number | null;
+  quantityDiscountPercentage?: number | null;
+  freeDeliveryEnabled?: boolean | null;
+  freeDeliveryMinQuantity?: number | null;
+  customDeliveryFee?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -31,12 +38,22 @@ export interface Product {
 export interface Order {
   _id: string;
   clientName: string;
-  email: string;
+  email?: string;
   phone: string;
   address: string;
   product: string | Product;
   quantity: number;
-  status: 'Nouveau' | 'En cours' | 'Terminé';
+  status: 'Nouveau' | 'En cours' | 'Terminé' | 'Annulé';
+  totalPrice?: number;
+  unitPrice?: number;
+  unitPriceWithPromo?: number;
+  subtotal?: number;
+  deliveryFee?: number;
+  isFreeDelivery?: boolean;
+  productPromoPercentage?: number;
+  quantityDiscountPercentage?: number;
+  quantityDiscountAmount?: number;
+  priceAfterDiscount?: number;
   createdAt?: string;
 }
 

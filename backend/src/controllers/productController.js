@@ -84,6 +84,14 @@ export const getProductById = async (req, res) => {
   }
 };
 
+// Fonction helper pour parser les valeurs null
+const parseNullableValue = (value) => {
+  if (value === 'null' || value === null || value === undefined || value === '') {
+    return null;
+  }
+  return value;
+};
+
 // POST /api/products
 export const addProduct = async (req, res) => {
   try {
@@ -94,7 +102,13 @@ export const addProduct = async (req, res) => {
       category,
       pourcentagePromo,
       stockLimite,
-      stockTotal
+      stockTotal,
+      quantityDiscountEnabled,
+      quantityDiscountMinQuantity,
+      quantityDiscountPercentage,
+      freeDeliveryEnabled,
+      freeDeliveryMinQuantity,
+      customDeliveryFee
     } = req.body;
 
     // Images uploadées
@@ -108,7 +122,14 @@ export const addProduct = async (req, res) => {
       pourcentagePromo,
       stockLimite,
       stockTotal: stockTotal ? parseInt(stockTotal) : 0,
-      images
+      images,
+      // Paramètres de remise et livraison
+      quantityDiscountEnabled: parseNullableValue(quantityDiscountEnabled) === 'true' ? true : parseNullableValue(quantityDiscountEnabled) === 'false' ? false : null,
+      quantityDiscountMinQuantity: parseNullableValue(quantityDiscountMinQuantity) ? parseInt(quantityDiscountMinQuantity) : null,
+      quantityDiscountPercentage: parseNullableValue(quantityDiscountPercentage) ? parseFloat(quantityDiscountPercentage) : null,
+      freeDeliveryEnabled: parseNullableValue(freeDeliveryEnabled) === 'true' ? true : parseNullableValue(freeDeliveryEnabled) === 'false' ? false : null,
+      freeDeliveryMinQuantity: parseNullableValue(freeDeliveryMinQuantity) ? parseInt(freeDeliveryMinQuantity) : null,
+      customDeliveryFee: parseNullableValue(customDeliveryFee) ? parseFloat(customDeliveryFee) : null
     });
 
     await product.save();
@@ -137,6 +158,26 @@ export const updateProduct = async (req, res) => {
     // Convertir stockTotal en nombre si fourni
     if (updatedData.stockTotal !== undefined) {
       updatedData.stockTotal = parseInt(updatedData.stockTotal) || 0;
+    }
+
+    // Parser les paramètres de remise et livraison
+    if (updatedData.quantityDiscountEnabled !== undefined) {
+      updatedData.quantityDiscountEnabled = parseNullableValue(updatedData.quantityDiscountEnabled) === 'true' ? true : parseNullableValue(updatedData.quantityDiscountEnabled) === 'false' ? false : null;
+    }
+    if (updatedData.quantityDiscountMinQuantity !== undefined) {
+      updatedData.quantityDiscountMinQuantity = parseNullableValue(updatedData.quantityDiscountMinQuantity) ? parseInt(updatedData.quantityDiscountMinQuantity) : null;
+    }
+    if (updatedData.quantityDiscountPercentage !== undefined) {
+      updatedData.quantityDiscountPercentage = parseNullableValue(updatedData.quantityDiscountPercentage) ? parseFloat(updatedData.quantityDiscountPercentage) : null;
+    }
+    if (updatedData.freeDeliveryEnabled !== undefined) {
+      updatedData.freeDeliveryEnabled = parseNullableValue(updatedData.freeDeliveryEnabled) === 'true' ? true : parseNullableValue(updatedData.freeDeliveryEnabled) === 'false' ? false : null;
+    }
+    if (updatedData.freeDeliveryMinQuantity !== undefined) {
+      updatedData.freeDeliveryMinQuantity = parseNullableValue(updatedData.freeDeliveryMinQuantity) ? parseInt(updatedData.freeDeliveryMinQuantity) : null;
+    }
+    if (updatedData.customDeliveryFee !== undefined) {
+      updatedData.customDeliveryFee = parseNullableValue(updatedData.customDeliveryFee) ? parseFloat(updatedData.customDeliveryFee) : null;
     }
 
     // Si nouvelles images uploadées

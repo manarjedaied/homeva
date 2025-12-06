@@ -125,3 +125,25 @@ export const adminOrderAPI = {
     }),
 };
 
+// API Settings
+export interface Settings {
+  _id?: string;
+  quantityDiscountEnabled: boolean;
+  quantityDiscountMinQuantity: number;
+  quantityDiscountPercentage: number;
+  freeDeliveryEnabled: boolean;
+  freeDeliveryMinQuantity: number;
+  defaultDeliveryFee: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export const adminSettingsAPI = {
+  get: (): Promise<Settings> => fetchAPI<Settings>('/settings'),
+  update: (settings: Partial<Settings>): Promise<Settings> =>
+    fetchAPI<Settings>('/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settings),
+    }),
+};
+
