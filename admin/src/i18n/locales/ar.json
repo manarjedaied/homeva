@@ -1,0 +1,97 @@
+{
+  "common": {
+    "welcome": "مرحبا",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "back": "رجوع",
+    "actions": "إجراءات",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "admin": {
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "products": "المنتجات",
+      "orders": "الطلبات",
+      "categories": "الفئات",
+      "logout": "تسجيل الخروج"
+    },
+    "login": {
+      "title": "تسجيل دخول المدير",
+      "subtitle": "الوصول إلى لوحة الإدارة",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "error": "خطأ في تسجيل الدخول"
+    },
+    "categories": {
+      "title": "فئات المنتجات",
+      "subtitle": "نظم الكتالوج إلى فئات وقم بتفعيلها أو تعطيلها بسهولة.",
+      "addTitle": "إنشاء فئة",
+      "editTitle": "تعديل الفئة",
+      "newCategory": "فئة جديدة",
+      "name": "الاسم",
+      "description": "الوصف",
+      "isActive": "فئة مفعلة",
+      "status": "الحالة",
+      "products": "المنتجات",
+      "empty": "لا توجد فئات حتى الآن.",
+      "confirmDelete": "هل تريد حذف هذه الفئة نهائياً؟",
+      "disable": "تعطيل",
+      "enable": "تفعيل",
+      "addCategory": "إضافة فئة",
+      "noCategories": "لا توجد فئات متاحة حالياً",
+      "categoryHelp": "أضف فئة واحدة على الأقل لتفعيل الاختيار.",
+      "newCategoryPlaceholder": "اسم الفئة الجديدة",
+      "inactiveLabel": "غير مفعّل"
+    },
+    "dashboard": {
+      "title": "لوحة التحكم",
+      "totalProducts": "إجمالي المنتجات",
+      "totalOrders": "إجمالي الطلبات",
+      "pendingOrders": "الطلبات المعلقة",
+      "completedOrders": "الطلبات المكتملة"
+    },
+    "products": {
+      "title": "إدارة المنتجات",
+      "add": "إضافة منتج",
+      "edit": "تعديل المنتج",
+      "name": "الاسم",
+      "description": "الوصف",
+      "price": "السعر",
+      "category": "الفئة",
+      "stock": "المخزون",
+      "image": "الصور",
+      "imageHint": "الصيغ المسموح بها: JPG, PNG, WEBP (حد أقصى 5MB)",
+      "selectCategory": "اختر فئة",
+      "noCategories": "لا توجد فئات متاحة حالياً",
+      "categoryHelp": "أضف فئة واحدة على الأقل لتفعيل الاختيار.",
+      "addCategory": "إضافة فئة",
+      "newCategoryPlaceholder": "اسم الفئة الجديدة",
+      "pourcentagePromo": "نسبة التخفيض (%)",
+      "stockLimite": "مخزون محدود",
+      "confirmDelete": "هل أنت متأكد من حذف هذا المنتج؟"
+    },
+    "orders": {
+      "title": "إدارة الطلبات",
+      "clientName": "العميل",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "product": "المنتج",
+      "quantity": "الكمية",
+      "status": "الحالة",
+      "complete": "إكمال"
+    }
+  },
+  "products": {
+    "currencySymbol": "د.ت"
+  }
+}
+

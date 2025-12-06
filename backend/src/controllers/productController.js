@@ -1,10 +1,46 @@
 import Product from "../models/Product.js";
+import Order from "../models/Order.js";
 
 // GET /api/products
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find().populate("category");
-    res.json(products);
+    
+    // Calculer le stock restant pour chaque produit
+    const productsWithStock = await Promise.all(
+      products.map(async (product) => {
+        const productObj = product.toObject();
+        
+        // Calculer la quantité totale commandée (non annulée)
+        const totalOrdered = await Order.aggregate([
+          {
+            $match: {
+              product: product._id,
+              status: { $ne: "Annulé" }
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: "$quantity" }
+            }
+          }
+        ]);
+        
+        const orderedQuantity = totalOrdered.length > 0 ? totalOrdered[0].total : 0;
+        const remainingStock = product.stockTotal > 0 
+          ? Math.max(0, product.stockTotal - orderedQuantity)
+          : null;
+        
+        return {
+          ...productObj,
+          orderedQuantity,
+          remainingStock
+        };
+      })
+    );
+    
+    res.json(productsWithStock);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -15,7 +51,34 @@ export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate("category");
     if (!product) return res.status(404).json({ message: "Produit non trouvé" });
-    res.json(product);
+    
+    // Calculer le stock restant
+    const totalOrdered = await Order.aggregate([
+      {
+        $match: {
+          product: product._id,
+          status: { $ne: "Annulé" }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$quantity" }
+        }
+      }
+    ]);
+    
+    const orderedQuantity = totalOrdered.length > 0 ? totalOrdered[0].total : 0;
+    const remainingStock = product.stockTotal > 0 
+      ? Math.max(0, product.stockTotal - orderedQuantity)
+      : null;
+    
+    const productObj = product.toObject();
+    res.json({
+      ...productObj,
+      orderedQuantity,
+      remainingStock
+    });
   } catch (error) {
     res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
@@ -30,7 +93,8 @@ export const addProduct = async (req, res) => {
       description,
       category,
       pourcentagePromo,
-      stockLimite
+      stockLimite,
+      stockTotal
     } = req.body;
 
     // Images uploadées
@@ -43,11 +107,20 @@ export const addProduct = async (req, res) => {
       category,
       pourcentagePromo,
       stockLimite,
+      stockTotal: stockTotal ? parseInt(stockTotal) : 0,
       images
     });
 
     await product.save();
-    res.status(201).json(product);
+    const savedProduct = await product.populate("category");
+    
+    // Pour un nouveau produit, stock restant = stock total
+    const productObj = savedProduct.toObject();
+    res.status(201).json({
+      ...productObj,
+      orderedQuantity: 0,
+      remainingStock: product.stockTotal > 0 ? product.stockTotal : null
+    });
 
   } catch (error) {
     res.status(500).json({ message: "Erreur création produit", error: error.message });
@@ -61,6 +134,11 @@ export const updateProduct = async (req, res) => {
       ...req.body
     };
 
+    // Convertir stockTotal en nombre si fourni
+    if (updatedData.stockTotal !== undefined) {
+      updatedData.stockTotal = parseInt(updatedData.stockTotal) || 0;
+    }
+
     // Si nouvelles images uploadées
     if (req.files && req.files.length > 0) {
       updatedData.images = req.files.map(file => `/uploads/${file.filename}`);
@@ -70,11 +148,37 @@ export const updateProduct = async (req, res) => {
       req.params.id,
       updatedData,
       { new: true }
-    );
+    ).populate("category");
 
     if (!updatedProduct) return res.status(404).json({ message: "Produit non trouvé" });
 
-    res.json(updatedProduct);
+    // Calculer le stock restant
+    const totalOrdered = await Order.aggregate([
+      {
+        $match: {
+          product: updatedProduct._id,
+          status: { $ne: "Annulé" }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$quantity" }
+        }
+      }
+    ]);
+    
+    const orderedQuantity = totalOrdered.length > 0 ? totalOrdered[0].total : 0;
+    const remainingStock = updatedProduct.stockTotal > 0 
+      ? Math.max(0, updatedProduct.stockTotal - orderedQuantity)
+      : null;
+    
+    const productObj = updatedProduct.toObject();
+    res.json({
+      ...productObj,
+      orderedQuantity,
+      remainingStock
+    });
 
   } catch (error) {
     res.status(400).json({ message: "Erreur mise à jour produit", error: error.message });
