@@ -58,12 +58,23 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise
 
 // API Admin
 export const adminAPI = {
-  login: (email: string, password: string): Promise<{ message: string }> =>
-    fetchAPI<{ message: string }>('/admin/login', {
+  login: (email: string, password: string) =>
+    fetchAPI('/admin/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),
+refresh: (refreshToken: string) =>
+    fetchAPI('/admin/refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }, // important
+      body: JSON.stringify({ refreshToken }), // clé exactement comme attendue par le backend
+    }),
+
+
+  logout: () =>
+    fetchAPI('/admin/logout', { method: 'POST' }),
 };
+
 
 // API Products (Admin)
 export const adminProductAPI = {

@@ -177,7 +177,7 @@ export const AdminDashboard: React.FC = () => {
               <div key={order._id} className="recent-order-card">
                 <div className="recent-order-info">
                   <h4>{order.clientName}</h4>
-                  <p>{order.product} × {order.quantity}</p>
+                  <p>{typeof order.product === 'string' ? order.product : order.product.name} × {order.quantity}</p>
                 </div>
                 <div className="recent-order-status">
                   <span className={`status-badge status-${order.status.toLowerCase().replace(' ', '-')}`}>

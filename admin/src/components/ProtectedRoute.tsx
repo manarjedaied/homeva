@@ -1,22 +1,56 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { adminStorage } from '../utils/storage';
+import React from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { adminAPI } from "../services/api";
+import Auth from "../utils/storage";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  // En mode développement, auto-login avec compte statique si non authentifié
-  if (import.meta.env.DEV && !adminStorage.isAuthenticated()) {
-    adminStorage.setToken('dev_admin_token');
-    adminStorage.setEmail('admin@homeva.com');
-  }
+  const token = Auth.getToken();
+  const refresh = Auth.getRefresh();
 
-  if (!adminStorage.isAuthenticated()) {
-    return <Navigate to="/admin/login" replace />;
+  // Si pas connecté → redirect
+  if (!token) return <Navigate to="/admin/login" replace />;
+
+  // Check expiration
+  if (!Auth.isAuthenticated()) {
+    // Token expiré → essayer refresh
+    if (!refresh) return <Navigate to="/admin/login" replace />;
+
+   return <RefreshWrapper refreshToken={refresh}>{children}</RefreshWrapper>;
+
   }
 
   return <>{children}</>;
+};
+
+// ------------------------------------------------------
+// Auto-refresh token wrapper
+// ------------------------------------------------------
+// Appel du wrapper
+
+// Wrapper
+const RefreshWrapper = ({ refreshToken, children }: any) => {
+  const navigate = useNavigate();
+  const [done, setDone] = React.useState(false);
+
+  React.useEffect(() => {
+    const refreshTokenFunc = async () => {
+      try {
+        const res = await adminAPI.refresh(refreshToken);
+        Auth.setSession((res as { accessToken: string }).accessToken, refreshToken);
+        setDone(true);
+      } catch {
+        Auth.clear();
+        navigate("/admin/login");
+      }
+    };
+    refreshTokenFunc();
+  }, [refreshToken, navigate]);
+
+  if (!done) return <div>Loading...</div>;
+  return children;
 };
 

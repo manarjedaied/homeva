@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
 import { MoonIcon, SunIcon } from './icons/ThemeIcons';
 import { LanguageSwitcher } from './nav/LanguageSwitcher';
-import { adminStorage } from '../utils/storage';
+import Auth from '../utils/storage';
 
 export const Sidebar: React.FC = () => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ export const Sidebar: React.FC = () => {
   };
 
   const handleLogout = () => {
-    adminStorage.clear();
+    Auth.clear();
     navigate('/admin/login');
   };
 

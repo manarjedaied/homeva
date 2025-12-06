@@ -1,33 +1,46 @@
-// Utilitaires pour la gestion du stockage local (session admin)
+import { jwtDecode } from "jwt-decode";
 
-const ADMIN_TOKEN_KEY = 'admin_token';
-const ADMIN_EMAIL_KEY = 'admin_email';
+const Auth = {
+    setSession(accessToken: string, refreshToken: string) {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+    },
 
-export const adminStorage = {
-  setToken: (token: string) => {
-    localStorage.setItem(ADMIN_TOKEN_KEY, token);
-  },
-  getToken: (): string | null => {
-    return localStorage.getItem(ADMIN_TOKEN_KEY);
-  },
-  removeToken: () => {
-    localStorage.removeItem(ADMIN_TOKEN_KEY);
-  },
-  setEmail: (email: string) => {
-    localStorage.setItem(ADMIN_EMAIL_KEY, email);
-  },
-  getEmail: (): string | null => {
-    return localStorage.getItem(ADMIN_EMAIL_KEY);
-  },
-  removeEmail: () => {
-    localStorage.removeItem(ADMIN_EMAIL_KEY);
-  },
-  clear: () => {
-    localStorage.removeItem(ADMIN_TOKEN_KEY);
-    localStorage.removeItem(ADMIN_EMAIL_KEY);
-  },
-  isAuthenticated: (): boolean => {
-    return !!localStorage.getItem(ADMIN_TOKEN_KEY);
-  },
+    clear() {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+    },
+
+    getToken() {
+        return localStorage.getItem("accessToken");
+    },
+
+    getRefresh() {
+        return localStorage.getItem("refreshToken");
+    },
+
+    getUser() {
+        const token = this.getToken();
+        if (!token) return null;
+
+        try {
+            return jwtDecode(token); // { email, role, id, exp }
+        } catch (err) {
+            return null;
+        }
+    },
+
+    isAuthenticated() {
+        const token = this.getToken();
+        if (!token) return false;
+
+        try {
+            const decoded = jwtDecode<{ exp: number }>(token);
+            return decoded.exp * 1000 > Date.now();
+        } catch {
+            return false;
+        }
+    }
 };
 
+export default Auth;
