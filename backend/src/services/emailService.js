@@ -289,14 +289,7 @@ export const sendOrderNotification = async (order) => {
   } catch (error) {
     console.error('❌ Erreur lors de l\'envoi de l\'email:', error.message);
     
-    // Messages d'aide selon le type d'erreur
-    if (error.code === 'EAUTH' || error.responseCode === 535) {
-      console.error('\n⚠️  ERREUR D\'AUTHENTIFICATION GMAIL:');
-      console.error('1. Vérifiez que vous utilisez un MOT DE PASSE D\'APPLICATION (pas votre mot de passe Gmail)');
-      console.error('2. Générez un nouveau mot de passe d\'application: https://myaccount.google.com/apppasswords');
-      console.error('3. Assurez-vous que l\'authentification à 2 facteurs est activée');
-      console.error('4. Le mot de passe doit être de 16 caractères (sans espaces)\n');
-    }
+
     
     // Ne pas faire échouer la création de commande si l'email échoue
     return { success: false, error: error.message };

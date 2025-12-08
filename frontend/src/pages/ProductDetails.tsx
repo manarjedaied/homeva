@@ -26,6 +26,7 @@ export const ProductDetails: React.FC = () => {
   const [form, setForm] = useState({
     clientName: "",
     phone: "",
+    ville: "",
     address: "",
     quantity: 1,
   });
@@ -135,7 +136,7 @@ export const ProductDetails: React.FC = () => {
     setSubmitting(true);
     setOrderMessage(null);
 
-    if (!form.clientName || !form.phone || !form.address) {
+    if (!form.clientName || !form.phone || !form.ville || !form.address) {
       setOrderMessage({ type: "error", text: t("orders.pleaseFillAll") });
       setSubmitting(false);
       return;
@@ -145,6 +146,7 @@ export const ProductDetails: React.FC = () => {
       await orderAPI.create({
         clientName: form.clientName,
         phone: form.phone,
+        ville: form.ville,
         address: form.address,
         product: product._id,
         quantity: form.quantity,
@@ -169,6 +171,7 @@ export const ProductDetails: React.FC = () => {
         setForm({
           clientName: "",
           phone: "",
+          ville: "",
           address: "",
           quantity: 1,
         });
@@ -293,6 +296,15 @@ export const ProductDetails: React.FC = () => {
                   type="tel"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>الولاية *</label>
+                <input
+                  type="text"
+                  value={form.ville}
+                  onChange={(e) => setForm({ ...form, ville: e.target.value })}
                 />
               </div>
 

@@ -40,6 +40,7 @@ export interface Order {
   clientName: string;
   email?: string;
   phone: string;
+  ville: string;
   address: string;
   product: string | Product;
   quantity: number;
