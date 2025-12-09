@@ -1,4 +1,5 @@
 import Order from "../models/Order.js";
+import { sendOrderNotification } from "../services/emailService.js";
 
 // GET /api/orders
 export const getOrders = async (req, res) => {
@@ -17,6 +18,15 @@ export const createOrder = async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     const savedOrder = await newOrder.save();
+    
+    // Populate le produit pour l'email
+    const orderWithProduct = await Order.findById(savedOrder._id).populate("product");
+    
+    // Envoyer la notification email (en arrière-plan, ne bloque pas la réponse)
+    sendOrderNotification(orderWithProduct).catch(err => {
+      console.error('Erreur email (non bloquante):', err);
+    });
+    
     res.status(201).json(savedOrder);
   } catch (error) {
     res.status(400).json({ message: "Erreur création commande", error: error.message });
@@ -27,10 +37,14 @@ export const createOrder = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    if (!["Nouveau", "En cours", "Terminé"].includes(status)) {
+    if (!["Nouveau", "En cours", "Terminé", "Annulé"].includes(status)) {
       return res.status(400).json({ message: "Statut invalide" });
     }
-    const updatedOrder = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.id, 
+      { status }, 
+      { new: true }
+    ).populate("product");
     if (!updatedOrder) return res.status(404).json({ message: "Commande non trouvée" });
     res.json(updatedOrder);
   } catch (error) {

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { productAPI, orderAPI } from "../services/api";
+import i18n from "../i18n/config";
+import { productAPI, orderAPI, settingsAPI, Settings } from "../services/api";
 import { Product } from "../types";
 import { formatPrice } from "../utils/formatPrice";
 const BASE_URL = "http://localhost:5000";
@@ -12,6 +13,7 @@ export const ProductDetails: React.FC = () => {
   const { t } = useTranslation();
 
   const [product, setProduct] = useState<Product | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -24,27 +26,32 @@ export const ProductDetails: React.FC = () => {
   const [form, setForm] = useState({
     clientName: "",
     phone: "",
+    ville: "",
     address: "",
     quantity: 1,
   });
 
   // -------------------------
-  // Fetch product dynamically
+  // Fetch product and settings
   // -------------------------
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await productAPI.getById(id!);
-        setProduct(data);
+        const [productData, settingsData] = await Promise.all([
+          productAPI.getById(id!),
+          settingsAPI.get()
+        ]);
+        setProduct(productData);
+        setSettings(settingsData);
       } catch (err) {
-        console.error("Error loading product:", err);
+        console.error("Error loading data:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchProduct();
+    if (id) fetchData();
   }, [id]);
 
   if (loading) {
@@ -72,10 +79,29 @@ export const ProductDetails: React.FC = () => {
   // -------------------------
   // PRICE CALCULATIONS
   // -------------------------
-  const DELIVERY_FEE = 7;
-  const DISCOUNT_PERCENTAGE = 5;
-
   const quantity = form.quantity;
+  
+  // Utiliser les paramètres du produit en priorité, sinon les settings globaux, sinon valeurs par défaut
+  const quantityDiscountEnabled = product.quantityDiscountEnabled !== null && product.quantityDiscountEnabled !== undefined
+    ? product.quantityDiscountEnabled
+    : (settings?.quantityDiscountEnabled ?? true);
+  const discountPercentage = product.quantityDiscountPercentage !== null && product.quantityDiscountPercentage !== undefined
+    ? product.quantityDiscountPercentage
+    : (settings?.quantityDiscountPercentage ?? 5);
+  const discountMinQuantity = product.quantityDiscountMinQuantity !== null && product.quantityDiscountMinQuantity !== undefined
+    ? product.quantityDiscountMinQuantity
+    : (settings?.quantityDiscountMinQuantity ?? 2);
+  
+  const freeDeliveryEnabled = product.freeDeliveryEnabled !== null && product.freeDeliveryEnabled !== undefined
+    ? product.freeDeliveryEnabled
+    : (settings?.freeDeliveryEnabled ?? true);
+  const freeDeliveryMinQuantity = product.freeDeliveryMinQuantity !== null && product.freeDeliveryMinQuantity !== undefined
+    ? product.freeDeliveryMinQuantity
+    : (settings?.freeDeliveryMinQuantity ?? 3);
+  
+  const deliveryFee = product.customDeliveryFee !== null && product.customDeliveryFee !== undefined
+    ? product.customDeliveryFee
+    : (settings?.defaultDeliveryFee ?? 7);
   
   // Prix unitaire en tenant compte de la promo du produit
   const unitPrice = product.pourcentagePromo 
@@ -84,15 +110,17 @@ export const ProductDetails: React.FC = () => {
     
   const subtotal = unitPrice * quantity;
 
-  const hasDiscount = quantity === 2; // 5% only for exactly 2 items
-  const discountAmount = hasDiscount ? subtotal * (DISCOUNT_PERCENTAGE / 100) : 0;
+  // Vérifier si la remise quantité s'applique
+  const hasDiscount = quantityDiscountEnabled && quantity >= discountMinQuantity;
+  const discountAmount = hasDiscount ? subtotal * (discountPercentage / 100) : 0;
 
   const priceAfterDiscount = subtotal - discountAmount;
 
-  const isFreeDelivery = quantity >= 3;
-  const deliveryFee = isFreeDelivery ? 0 : DELIVERY_FEE;
+  // Vérifier si la livraison est gratuite
+  const isFreeDelivery = freeDeliveryEnabled && quantity >= freeDeliveryMinQuantity;
+  const finalDeliveryFee = isFreeDelivery ? 0 : deliveryFee;
 
-  const totalPrice = priceAfterDiscount + deliveryFee;
+  const totalPrice = priceAfterDiscount + finalDeliveryFee;
 
   const images = product.images && product.images.length
     ? product.images.map(img =>
@@ -108,7 +136,7 @@ export const ProductDetails: React.FC = () => {
     setSubmitting(true);
     setOrderMessage(null);
 
-    if (!form.clientName || !form.phone || !form.address) {
+    if (!form.clientName || !form.phone || !form.ville || !form.address) {
       setOrderMessage({ type: "error", text: t("orders.pleaseFillAll") });
       setSubmitting(false);
       return;
@@ -118,6 +146,7 @@ export const ProductDetails: React.FC = () => {
       await orderAPI.create({
         clientName: form.clientName,
         phone: form.phone,
+        ville: form.ville,
         address: form.address,
         product: product._id,
         quantity: form.quantity,
@@ -127,10 +156,10 @@ export const ProductDetails: React.FC = () => {
         productPromoPercentage: product.pourcentagePromo || 0,
         unitPriceWithPromo: unitPrice,
         subtotal: subtotal,
-        quantityDiscountPercentage: hasDiscount ? DISCOUNT_PERCENTAGE : 0,
+        quantityDiscountPercentage: hasDiscount ? discountPercentage : 0,
         quantityDiscountAmount: discountAmount,
         priceAfterDiscount: priceAfterDiscount,
-        deliveryFee: deliveryFee,
+        deliveryFee: finalDeliveryFee,
         isFreeDelivery: isFreeDelivery,
         totalPrice: totalPrice,
         deliveryType: "domicile"
@@ -142,6 +171,7 @@ export const ProductDetails: React.FC = () => {
         setForm({
           clientName: "",
           phone: "",
+          ville: "",
           address: "",
           quantity: 1,
         });
@@ -270,6 +300,15 @@ export const ProductDetails: React.FC = () => {
               </div>
 
               <div className="form-group">
+                <label>الولاية *</label>
+                <input
+                  type="text"
+                  value={form.ville}
+                  onChange={(e) => setForm({ ...form, ville: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
                 <label>{t("orders.address")} *</label>
                 <textarea
                   rows={3}
@@ -279,16 +318,50 @@ export const ProductDetails: React.FC = () => {
               </div>
 
               {/* PROMO SECTION */}
-              <div className="promo-section">
-                <div className="promo-item">
-                  <span className="promo-icon">🎁</span>
-                  <span className="promo-text">{t("orders.promo2Products")}</span>
+              {settings && (
+                <div className="promo-section">
+                  {quantityDiscountEnabled && (
+                    <div className="promo-item">
+                      <span className="promo-icon">🎁</span>
+                      <span className="promo-text">
+                        {(() => {
+                          const currentLang = i18n.language || 'fr';
+                          const isArabic = currentLang === 'ar';
+                          const isEnglish = currentLang === 'en';
+                          
+                          if (isArabic) {
+                            return `${discountMinQuantity} منتج = -${discountPercentage}%`;
+                          } else if (isEnglish) {
+                            return `${discountMinQuantity} product${discountMinQuantity > 1 ? 's' : ''} = -${discountPercentage}%`;
+                          } else {
+                            return `${discountMinQuantity} produit${discountMinQuantity > 1 ? 's' : ''} = -${discountPercentage}%`;
+                          }
+                        })()}
+                      </span>
+                    </div>
+                  )}
+                  {freeDeliveryEnabled && (
+                    <div className="promo-item">
+                      <span className="promo-icon">🚚</span>
+                      <span className="promo-text">
+                        {(() => {
+                          const currentLang = i18n.language || 'fr';
+                          const isArabic = currentLang === 'ar';
+                          const isEnglish = currentLang === 'en';
+                          
+                          if (isArabic) {
+                            return `${freeDeliveryMinQuantity} منتج = توصيل مجاني`;
+                          } else if (isEnglish) {
+                            return `${freeDeliveryMinQuantity} product${freeDeliveryMinQuantity > 1 ? 's' : ''} = Free delivery`;
+                          } else {
+                            return `${freeDeliveryMinQuantity} produit${freeDeliveryMinQuantity > 1 ? 's' : ''} = Livraison gratuite`;
+                          }
+                        })()}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <div className="promo-item">
-                  <span className="promo-icon">🚚</span>
-                  <span className="promo-text">{t("orders.promo3Products")}</span>
-                </div>
-              </div>
+              )}
 
               {/* QUANTITY */}
               <div className="form-group">
@@ -348,7 +421,7 @@ export const ProductDetails: React.FC = () => {
                 {hasDiscount && (
                   <div className="price-summary-row price-summary-discount">
                     <span className="price-summary-label">
-                      {t("orders.discount")} (-{DISCOUNT_PERCENTAGE}%)
+                      {t("orders.discount")} (-{discountPercentage}%)
                       <span className="save-badge">
                         {t("orders.youSave")}: {formatPrice(discountAmount)}
                       </span>
@@ -398,6 +471,7 @@ export const ProductDetails: React.FC = () => {
                     setForm({
                       clientName: "",
                       phone: "",
+                      ville: "",
                       address: "",
                       quantity: 1,
                     });

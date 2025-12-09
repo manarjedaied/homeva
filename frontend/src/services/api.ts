@@ -54,3 +54,20 @@ export const orderAPI = {
     }),
 };
 
+// API Settings
+export interface Settings {
+  _id?: string;
+  quantityDiscountEnabled: boolean;
+  quantityDiscountMinQuantity: number;
+  quantityDiscountPercentage: number;
+  freeDeliveryEnabled: boolean;
+  freeDeliveryMinQuantity: number;
+  defaultDeliveryFee: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export const settingsAPI = {
+  get: (): Promise<Settings> => fetchAPI<Settings>('/settings'),
+};
+

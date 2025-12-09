@@ -13,6 +13,16 @@ type ProductFormData = {
   pourcentagePromo: string;
   stockLimite: boolean;
   stockTotal: string;
+  // Paramètres de remise et livraison
+  useCustomDiscount: boolean;
+  quantityDiscountEnabled: string; // 'true', 'false', 'default'
+  quantityDiscountMinQuantity: string;
+  quantityDiscountPercentage: string;
+  useCustomFreeDelivery: boolean;
+  freeDeliveryEnabled: string; // 'true', 'false', 'default'
+  freeDeliveryMinQuantity: string;
+  useCustomDeliveryFee: boolean;
+  customDeliveryFee: string;
 };
 
 const createInitialFormData = (): ProductFormData => ({
@@ -23,6 +33,15 @@ const createInitialFormData = (): ProductFormData => ({
   pourcentagePromo: '',
   stockLimite: false,
   stockTotal: '',
+  useCustomDiscount: false,
+  quantityDiscountEnabled: 'default',
+  quantityDiscountMinQuantity: '',
+  quantityDiscountPercentage: '',
+  useCustomFreeDelivery: false,
+  freeDeliveryEnabled: 'default',
+  freeDeliveryMinQuantity: '',
+  useCustomDeliveryFee: false,
+  customDeliveryFee: '',
 });
 
 export const AdminProducts: React.FC = () => {
@@ -139,6 +158,44 @@ export const AdminProducts: React.FC = () => {
     );
     payload.append('stockLimite', String(formData.stockLimite));
     payload.append('stockTotal', String(parseInt(formData.stockTotal || '0') || 0));
+    
+    // Paramètres de remise et livraison
+    if (formData.useCustomDiscount) {
+      payload.append('quantityDiscountEnabled', formData.quantityDiscountEnabled === 'true' ? 'true' : formData.quantityDiscountEnabled === 'false' ? 'false' : 'null');
+      if (formData.quantityDiscountMinQuantity) {
+        payload.append('quantityDiscountMinQuantity', String(parseInt(formData.quantityDiscountMinQuantity) || null));
+      } else {
+        payload.append('quantityDiscountMinQuantity', 'null');
+      }
+      if (formData.quantityDiscountPercentage) {
+        payload.append('quantityDiscountPercentage', String(parseFloat(formData.quantityDiscountPercentage) || null));
+      } else {
+        payload.append('quantityDiscountPercentage', 'null');
+      }
+    } else {
+      payload.append('quantityDiscountEnabled', 'null');
+      payload.append('quantityDiscountMinQuantity', 'null');
+      payload.append('quantityDiscountPercentage', 'null');
+    }
+    
+    if (formData.useCustomFreeDelivery) {
+      payload.append('freeDeliveryEnabled', formData.freeDeliveryEnabled === 'true' ? 'true' : formData.freeDeliveryEnabled === 'false' ? 'false' : 'null');
+      if (formData.freeDeliveryMinQuantity) {
+        payload.append('freeDeliveryMinQuantity', String(parseInt(formData.freeDeliveryMinQuantity) || null));
+      } else {
+        payload.append('freeDeliveryMinQuantity', 'null');
+      }
+    } else {
+      payload.append('freeDeliveryEnabled', 'null');
+      payload.append('freeDeliveryMinQuantity', 'null');
+    }
+    
+    if (formData.useCustomDeliveryFee && formData.customDeliveryFee) {
+      payload.append('customDeliveryFee', String(parseFloat(formData.customDeliveryFee) || null));
+    } else {
+      payload.append('customDeliveryFee', 'null');
+    }
+    
     imageFiles.forEach((file) => {
       payload.append('images', file);
     });
@@ -171,6 +228,10 @@ export const AdminProducts: React.FC = () => {
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
+    const hasCustomDiscount = product.quantityDiscountEnabled !== null && product.quantityDiscountEnabled !== undefined;
+    const hasCustomFreeDelivery = product.freeDeliveryEnabled !== null && product.freeDeliveryEnabled !== undefined;
+    const hasCustomDeliveryFee = product.customDeliveryFee !== null && product.customDeliveryFee !== undefined;
+    
     setFormData({
       name: product.name,
       description: product.description,
@@ -182,6 +243,19 @@ export const AdminProducts: React.FC = () => {
       pourcentagePromo: product.pourcentagePromo?.toString() || '',
       stockLimite: Boolean(product.stockLimite),
       stockTotal: product.stockTotal?.toString() || '',
+      useCustomDiscount: hasCustomDiscount,
+      quantityDiscountEnabled: hasCustomDiscount 
+        ? (product.quantityDiscountEnabled ? 'true' : 'false')
+        : 'default',
+      quantityDiscountMinQuantity: product.quantityDiscountMinQuantity?.toString() || '',
+      quantityDiscountPercentage: product.quantityDiscountPercentage?.toString() || '',
+      useCustomFreeDelivery: hasCustomFreeDelivery,
+      freeDeliveryEnabled: hasCustomFreeDelivery
+        ? (product.freeDeliveryEnabled ? 'true' : 'false')
+        : 'default',
+      freeDeliveryMinQuantity: product.freeDeliveryMinQuantity?.toString() || '',
+      useCustomDeliveryFee: hasCustomDeliveryFee,
+      customDeliveryFee: product.customDeliveryFee?.toString() || '',
     });
     setExistingImages(product.images ?? (product.image ? [product.image] : []));
     setImageFiles([]);
@@ -367,7 +441,6 @@ export const AdminProducts: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, stockTotal: e.target.value })
                     }
-                    placeholder="200"
                   />
                   <span className="stock-hint">
                     Quantité totale disponible en stock (0 = stock illimité)
@@ -433,7 +506,7 @@ export const AdminProducts: React.FC = () => {
                     <div className="images-section">
                       <h4 className="images-section-title">Images actuelles ({existingImages.length})</h4>
                       <div className="image-preview-grid">
-                        {existingImages.map((img, idx) => (
+                        {existingImages.map((img) => (
                           <div key={img} className="image-preview-container existing">
                             <img src={getImageUrl(img)} alt="Produit" className="image-preview" />
                             <span className="image-badge">Actuelle</span>
@@ -482,6 +555,150 @@ export const AdminProducts: React.FC = () => {
                   )}
                 </div>
               </div>
+              
+              {/* Section Paramètres de remise et livraison */}
+              <div className="product-settings-section">
+                <h3 className="settings-section-title">Offres et promotions</h3>
+                <p className="settings-section-subtitle">
+                  Configurez les règles de remise et livraison spécifiques à ce produit. 
+                  Si non configuré, les paramètres globaux seront utilisés.
+                </p>
+                
+                {/* Remise quantité */}
+                <div className="settings-item">
+                  <div className="settings-item-header">
+                    <label className="settings-item-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.useCustomDiscount}
+                        onChange={(e) => setFormData({ ...formData, useCustomDiscount: e.target.checked })}
+                      />
+                      <span>Remise quantité personnalisée</span>
+                    </label>
+                  </div>
+                  {formData.useCustomDiscount && (
+                    <div className="settings-item-content">
+                      <div className="form-group">
+                        <label>Activer la remise</label>
+                        <select
+                          className="admin-form-select"
+                          value={formData.quantityDiscountEnabled}
+                          onChange={(e) => setFormData({ ...formData, quantityDiscountEnabled: e.target.value })}
+                        >
+                          <option value="default">Utiliser les paramètres globaux</option>
+                          <option value="true">Activée</option>
+                          <option value="false">Désactivée</option>
+                        </select>
+                      </div>
+                      {formData.quantityDiscountEnabled !== 'default' && (
+                        <>
+                          <div className="form-group">
+                            <label>Quantité minimale</label>
+                            <input
+                              type="number"
+                              min="1"
+                              className="admin-form-input"
+                              value={formData.quantityDiscountMinQuantity}
+                              onChange={(e) => setFormData({ ...formData, quantityDiscountMinQuantity: e.target.value })}
+                              placeholder="Ex: 2"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label>Pourcentage de remise (%)</label>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              step="0.1"
+                              className="admin-form-input"
+                              value={formData.quantityDiscountPercentage}
+                              onChange={(e) => setFormData({ ...formData, quantityDiscountPercentage: e.target.value })}
+                              placeholder="Ex: 5"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Livraison gratuite */}
+                <div className="settings-item">
+                  <div className="settings-item-header">
+                    <label className="settings-item-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.useCustomFreeDelivery}
+                        onChange={(e) => setFormData({ ...formData, useCustomFreeDelivery: e.target.checked })}
+                      />
+                      <span>Livraison gratuite personnalisée</span>
+                    </label>
+                  </div>
+                  {formData.useCustomFreeDelivery && (
+                    <div className="settings-item-content">
+                      <div className="form-group">
+                        <label>Activer la livraison gratuite</label>
+                        <select
+                          className="admin-form-select"
+                          value={formData.freeDeliveryEnabled}
+                          onChange={(e) => setFormData({ ...formData, freeDeliveryEnabled: e.target.value })}
+                        >
+                          <option value="default">Utiliser les paramètres globaux</option>
+                          <option value="true">Activée</option>
+                          <option value="false">Désactivée</option>
+                        </select>
+                      </div>
+                      {formData.freeDeliveryEnabled !== 'default' && (
+                        <div className="form-group">
+                          <label>Quantité minimale</label>
+                          <input
+                            type="number"
+                            min="1"
+                            className="admin-form-input"
+                            value={formData.freeDeliveryMinQuantity}
+                            onChange={(e) => setFormData({ ...formData, freeDeliveryMinQuantity: e.target.value })}
+                            placeholder="Ex: 3"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Frais de livraison personnalisé */}
+                <div className="settings-item">
+                  <div className="settings-item-header">
+                    <label className="settings-item-label">
+                      <input
+                        type="checkbox"
+                        checked={formData.useCustomDeliveryFee}
+                        onChange={(e) => setFormData({ ...formData, useCustomDeliveryFee: e.target.checked })}
+                      />
+                      <span>Frais de livraison personnalisé</span>
+                    </label>
+                  </div>
+                  {formData.useCustomDeliveryFee && (
+                    <div className="settings-item-content">
+                      <div className="form-group">
+                        <label>Frais de livraison (د.ت)</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.001"
+                          className="admin-form-input"
+                          value={formData.customDeliveryFee}
+                          onChange={(e) => setFormData({ ...formData, customDeliveryFee: e.target.value })}
+                          placeholder="Ex: 7"
+                        />
+                        <p className="admin-form-hint">
+                          Si non renseigné, les frais de livraison globaux seront utilisés
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
               <div className="admin-form-actions">
                 <button type="submit" className="admin-btn-primary" disabled={submitting}>
                   {submitting ? t('common.loading') : t('common.save')}
