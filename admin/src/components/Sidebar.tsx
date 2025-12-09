@@ -29,6 +29,7 @@ export const Sidebar: React.FC = () => {
     { path: '/admin/products', icon: '📦', label: t('admin.nav.products') },
     { path: '/admin/categories', icon: '🗂️', label: t('admin.nav.categories') },
     { path: '/admin/orders', icon: '🛒', label: t('admin.nav.orders') },
+    { path: '/admin/settings', icon: '⚙️', label: 'Paramètres' },
   ];
 
   return (

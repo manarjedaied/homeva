@@ -75,6 +75,8 @@
     "pleaseFillAll": "يرجى ملء جميع الحقول",
     "promo2Products": "منتجين = -5%",
     "promo3Products": "3 منتجات = توصيل مجاني",
+    "promoDiscount": "{{quantity}} منتج{{plural}} = -{{percentage}}%",
+    "promoFreeDelivery": "{{quantity}} منتج{{plural}} = توصيل مجاني",
     "price": "السعر",
     "delivery": "التوصيل",
     "total": "المجموع",

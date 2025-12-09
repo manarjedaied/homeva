@@ -75,6 +75,8 @@
     "pleaseFillAll": "Veuillez remplir tous les champs",
     "promo2Products": "2 produits = -5%",
     "promo3Products": "3 produits = Livraison gratuite",
+    "promoDiscount": "{{quantity}} produit{{plural}} = -{{percentage}}%",
+    "promoFreeDelivery": "{{quantity}} produit{{plural}} = Livraison gratuite",
     "price": "Prix",
     "delivery": "Livraison",
     "total": "Total",
