@@ -57,6 +57,7 @@ export const Products: React.FC = () => {
       </div>
     );
   }
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   return (
     <div className="products-page">
@@ -95,7 +96,7 @@ onClick={() => setSelectedCategory(category || "all")}
 
             const firstImage =
               product.images && product.images.length > 0
-                ? `http://localhost:5000${product.images[0]}`
+                ? `${API_URL}${product.images[0]}`
                 : "https://via.placeholder.com/300x300?text=Produit";
 
             return (
@@ -167,10 +168,10 @@ onClick={() => setSelectedCategory(category || "all")}
                       className="product-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log("Ajouter au panier :", product._id);
+                        navigate(`/products/${product._id}`)
                       }}
                     >
-                      {t("products.addToCart")}
+                  {t("products.viewDetails")}
                     </button>
                   </div>
                 </div>

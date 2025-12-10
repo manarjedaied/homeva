@@ -1465,6 +1465,26 @@ body {
 .order-client {
   min-width: 200px;
 }
+@media (max-width: 1920px) {
+  .order-client ,
+  .order-product{
+    min-width: auto !important;
+  }
+}
+
+
+@media (max-width: 1920px) {
+  .actions-buttons button {
+    padding: 6px 10px !important;
+    font-size: 0.8rem !important;
+  }
+}
+@media (max-width: 1920px) {
+  .order-actions { 
+    min-width: 120px !important;
+  
+}}
+
 
 .client-name {
   font-weight: 600;
