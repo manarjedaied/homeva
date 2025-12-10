@@ -20,8 +20,6 @@
   },
   "home": {
     "badge": "🏠 Votre maison, votre confort, votre style",
-    "title": "Transformez votre maison en un espace de rêve",
-    "subtitle": "Découvrez une collection exceptionnelle de produits pour la maison, modernes et pratiques, conçus pour améliorer votre qualité de vie au quotidien",
     "cta": "Acheter maintenant",
     "ctaSecondary": "Explorer les collections",
     
@@ -93,7 +91,10 @@
     "features": "Caractéristiques",
     "feature1": "Livraison à toute la Tunisie",
     "feature2": "Garantie qualité",
-    "feature3": "Retour sous 30 jours"
+    "feature3": "Retour sous 30 jours",
+    "limitedStock": "Stock limité",
+    "rating": "Note",
+    "orderConfirmation": "Êtes-vous sûr de vouloir passer cette commande ?"
   },
   "orders": {
     "title": "Commandes",

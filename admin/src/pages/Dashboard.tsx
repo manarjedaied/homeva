@@ -74,18 +74,19 @@ export const AdminDashboard: React.FC = () => {
         const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
         const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
 
-        // Filtrer les commandes (exclure "Annulé")
+        // Filtrer les commandes - Chiffre d'affaires uniquement avec "Terminé"
+        const completedOrders = (orders as Order[]).filter(o => o.status === 'Terminé');
         const validOrders = (orders as Order[]).filter(o => o.status !== 'Annulé');
         
-        // Chiffre d'affaires
-        const totalRevenue = validOrders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
-        const monthlyRevenue = validOrders
+        // Chiffre d'affaires - UNIQUEMENT les commandes terminées
+        const totalRevenue = completedOrders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
+        const monthlyRevenue = completedOrders
           .filter(o => {
             const orderDate = o.createdAt ? new Date(o.createdAt) : new Date(0);
             return orderDate >= currentMonthStart;
           })
           .reduce((sum, o) => sum + (o.totalPrice || 0), 0);
-        const previousMonthRevenue = validOrders
+        const previousMonthRevenue = completedOrders
           .filter(o => {
             const orderDate = o.createdAt ? new Date(o.createdAt) : new Date(0);
             return orderDate >= previousMonthStart && orderDate <= previousMonthEnd;
@@ -109,7 +110,7 @@ export const AdminDashboard: React.FC = () => {
           ? ((monthlyOrders - previousMonthOrders) / previousMonthOrders) * 100 
           : 0;
         const pendingOrders = validOrders.filter(o => o.status === 'Nouveau' || o.status === 'En cours').length;
-        const completedOrders = validOrders.filter(o => o.status === 'Terminé').length;
+        const completedOrdersCount = validOrders.filter(o => o.status === 'Terminé').length;
 
         // Produits
         const totalProducts = products.length;
@@ -187,7 +188,7 @@ export const AdminDashboard: React.FC = () => {
           previousMonthOrders,
           ordersChange,
           pendingOrders,
-          completedOrders,
+          completedOrders: completedOrdersCount,
           totalProducts,
           activeProducts,
           lowStockProducts,

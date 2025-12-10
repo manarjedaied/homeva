@@ -9,7 +9,7 @@ export const refreshAuth = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     req.admin = decoded; // Infos extraites du refresh token
     next();
   } catch (e) {
