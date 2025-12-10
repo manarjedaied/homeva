@@ -22,7 +22,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="main">{children}</main>
       <footer className="footer">
         <p>
-          &copy; 2024 Homeva.{' '}
+          &copy; 2026 Homeva.{' '}
           {i18n.language === 'ar' 
             ? 'جميع الحقوق محفوظة' 
             : i18n.language === 'en'

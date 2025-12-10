@@ -19,26 +19,63 @@
     "admin": "Administration"
   },
   "home": {
-    "title": "Simplifiez votre vie quotidienne",
-    "subtitle": "Découvrez notre sélection de produits essentiels pour rendre votre maison plus pratique et agréable",
-    "tagline": "Tout ce dont vous avez besoin pour votre maison",
-    "cta": "Découvrir nos produits",
-    "ctaSecondary": "Explorer les catégories",
-    "feature1Title": "Cuisine",
-    "feature1Desc": "Accessoires et ustensiles pratiques pour faciliter votre cuisine au quotidien",
-    "feature2Title": "Salon",
-    "feature2Desc": "Produits décoratifs et fonctionnels pour créer un espace de vie confortable",
-    "feature3Title": "Tous les espaces",
-    "feature3Desc": "Des solutions pour chaque pièce de votre maison, du salon à la chambre",
+    "badge": "🏠 Votre maison, votre confort, votre style",
+    "title": "Transformez votre maison en un espace de rêve",
+    "subtitle": "Découvrez une collection exceptionnelle de produits pour la maison, modernes et pratiques, conçus pour améliorer votre qualité de vie au quotidien",
+    "cta": "Acheter maintenant",
+    "ctaSecondary": "Explorer les collections",
+    
+    "stat1": "Produits tendance",
+    "stat2": "Livraison express",
+    "stat3": "Clients satisfaits",
+    
+    "trust1": "Livraison garantie",
+    "trust2": "Expédition rapide 24-48h",
+    "trust3": "Retour gratuit 30 jours",
+    
+    "categoriesTitle": "Achetez par catégorie",
+    "categoriesSubtitle": "Explorez nos collections soigneusement sélectionnées pour chaque pièce de votre maison",
+    
+    "category1Title": "Cuisine",
+    "category1Desc": "Ustensiles et accessoires modernes pour une cuisine pratique et élégante",
+    "category2Title": "Salon",
+    "category2Desc": "Décoration et mobilier pour créer une atmosphère chaleureuse et confortable",
+    "category3Title": "Chambre",
+    "category3Desc": "Produits conçus pour votre confort et un sommeil paisible",
+    "category4Title": "Salle de bain",
+    "category4Desc": "Accessoires et solutions de rangement pour une salle de bain organisée",
+    "category5Title": "Bureau",
+    "category5Desc": "Produits pour un espace de travail organisé et productif",
+    "category6Title": "Jardin & Terrasse",
+    "category6Desc": "Transformez vos espaces extérieurs en oasis de détente",
+    "categoryLink": "Découvrir plus →",
+    
     "whyTitle": "Pourquoi choisir Homeva ?",
-    "why1Title": "Qualité garantie",
-    "why1Desc": "Des produits sélectionnés pour leur qualité et leur durabilité",
-    "why2Title": "Livraison rapide",
-    "why2Desc": "Recevez vos commandes rapidement et en toute sécurité",
-    "why3Title": "Prix compétitifs",
-    "why3Desc": "Des prix accessibles pour tous les budgets",
-    "categoriesTitle": "Nos catégories",
-    "categoriesSubtitle": "Trouvez exactement ce dont vous avez besoin"
+    "whySubtitle": "Nous nous engageons à offrir la meilleure expérience d'achat à nos clients",
+    "why1Title": "Qualité exceptionnelle",
+    "why1Desc": "Des produits soigneusement sélectionnés auprès des meilleurs fournisseurs, avec garantie de qualité et de durabilité",
+    "why2Title": "Livraison ultra-rapide",
+    "why2Desc": "Recevez vos commandes en 24-48h partout en Tunisie",
+    "why3Title": "Prix imbattables",
+    "why3Desc": "Les meilleurs prix du marché avec des promotions exclusives régulières",
+    "why4Title": "Service client d'excellence",
+    "why4Desc": "Notre équipe est disponible pour répondre à toutes vos questions et vous accompagner",
+    
+    "testimonialsTitle": "L'avis de nos clients",
+    "testimonialsSubtitle": "Découvrez les expériences de nos clients satisfaits",
+    "testimonial1Text": "Produit très pratique ! Excellente qualité et prix raisonnable. La livraison était ponctuelle.",
+    "testimonial1Author": "Fatma M.",
+    "testimonial1Location": "Tunis",
+    "testimonial2Text": "Très satisfaite de mes achats. Les produits sont exactement comme décrits. Je commanderai à nouveau.",
+    "testimonial2Author": "Sarah K.",
+    "testimonial2Location": "Sfax",
+    "testimonial3Text": "Bonne qualité et excellent service. J'ai trouvé exactement ce que je cherchais. Je recommande !",
+    "testimonial3Author": "Samia T.",
+    "testimonial3Location": "Sousse",
+    
+    "ctaTitle": "Prêt à transformer votre maison ?",
+    "ctaText": "Rejoignez des milliers de clients satisfaits et découvrez notre gamme complète de produits",
+    "ctaButton": "Commencer mes achats"
   },
   "products": {
     "title": "Produits",
@@ -46,7 +83,7 @@
     "price": "Prix",
     "currency": "TND",
     "currencySymbol": "د.ت",
-    "addToCart": "Ajouter au panier",
+    "viewDetails": "Voir les détails",
     "details": "Détails",
     "notFound": "Produit non trouvé",
     "backToList": "Retour à la liste",
@@ -85,4 +122,3 @@
     "youSave": "Vous économisez"
   }
 }
-

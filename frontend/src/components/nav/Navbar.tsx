@@ -26,9 +26,7 @@ export const Navbar: React.FC = () => {
           <Link to="/products" className={isActive('/products') ? 'active' : ''}>
             {t('nav.products')}
           </Link>
-          <Link to="/orders" className={isActive('/orders') ? 'active' : ''}>
-            {t('nav.orders')}
-          </Link>
+         
         </div>
         <div className="header-actions">
           <button 
