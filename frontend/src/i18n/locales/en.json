@@ -19,26 +19,63 @@
     "admin": "Administration"
   },
   "home": {
-    "title": "Simplify your daily life",
-    "subtitle": "Discover our selection of essential products to make your home more practical and enjoyable",
-    "tagline": "Everything you need for your home",
-    "cta": "Discover our products",
-    "ctaSecondary": "Explore categories",
-    "feature1Title": "Kitchen",
-    "feature1Desc": "Practical accessories and utensils to make your daily cooking easier",
-    "feature2Title": "Living Room",
-    "feature2Desc": "Decorative and functional products to create a comfortable living space",
-    "feature3Title": "All Spaces",
-    "feature3Desc": "Solutions for every room in your home, from living room to bedroom",
+    "badge": "🏠 Your home, your comfort, your style",
+    "title": "Transform your house into a dream space",
+    "subtitle": "Discover an exceptional collection of modern and practical home products, designed to enhance your daily quality of life",
+    "cta": "Shop now",
+    "ctaSecondary": "Explore collections",
+    
+    "stat1": "Trendy products",
+    "stat2": "Express delivery",
+    "stat3": "Happy customers",
+    
+    "trust1": "Guaranteed delivery",
+    "trust2": "Fast shipping 24-48h",
+    "trust3": "Free return 30 days",
+    
+    "categoriesTitle": "Shop by category",
+    "categoriesSubtitle": "Explore our carefully curated collections for every room in your home",
+    
+    "category1Title": "Kitchen",
+    "category1Desc": "Modern utensils and accessories for a practical and elegant kitchen",
+    "category2Title": "Living Room",
+    "category2Desc": "Decoration and furniture to create a warm and comfortable atmosphere",
+    "category3Title": "Bedroom",
+    "category3Desc": "Products designed for your comfort and peaceful sleep",
+    "category4Title": "Bathroom",
+    "category4Desc": "Accessories and storage solutions for an organized bathroom",
+    "category5Title": "Office",
+    "category5Desc": "Products for an organized and productive workspace",
+    "category6Title": "Garden & Patio",
+    "category6Desc": "Turn your outdoor spaces into an oasis of relaxation",
+    "categoryLink": "Discover more →",
+    
     "whyTitle": "Why choose Homeva?",
-    "why1Title": "Guaranteed quality",
-    "why1Desc": "Products selected for their quality and durability",
-    "why2Title": "Fast delivery",
-    "why2Desc": "Receive your orders quickly and securely",
-    "why3Title": "Competitive prices",
-    "why3Desc": "Affordable prices for all budgets",
-    "categoriesTitle": "Our categories",
-    "categoriesSubtitle": "Find exactly what you need"
+    "whySubtitle": "We are committed to providing the best shopping experience to our customers",
+    "why1Title": "Exceptional quality",
+    "why1Desc": "Carefully selected products from the best suppliers, with quality and durability guarantee",
+    "why2Title": "Ultra-fast delivery",
+    "why2Desc": "Receive your orders in 24-48h anywhere in Tunisia",
+    "why3Title": "Unbeatable prices",
+    "why3Desc": "The best market prices with regular exclusive promotions",
+    "why4Title": "Excellence in customer service",
+    "why4Desc": "Our team is available to answer all your questions and support you",
+    
+    "testimonialsTitle": "Customer reviews",
+    "testimonialsSubtitle": "Discover the experiences of our satisfied customers",
+    "testimonial1Text": "Very practical product! Excellent quality and reasonable price. Delivery was on time.",
+    "testimonial1Author": "Fatma M.",
+    "testimonial1Location": "Tunis",
+    "testimonial2Text": "Very satisfied with my purchases. Products are exactly as described. I will order again.",
+    "testimonial2Author": "Sarah K.",
+    "testimonial2Location": "Sfax",
+    "testimonial3Text": "Good quality and excellent service. Found exactly what I was looking for. I recommend!",
+    "testimonial3Author": "Samia T.",
+    "testimonial3Location": "Sousse",
+    
+    "ctaTitle": "Ready to transform your home?",
+    "ctaText": "Join thousands of satisfied customers and discover our complete range of products",
+    "ctaButton": "Start shopping now"
   },
   "products": {
     "title": "Products",
@@ -46,7 +83,7 @@
     "price": "Price",
     "currency": "TND",
     "currencySymbol": "د.ت",
-    "addToCart": "Add to cart",
+    "viewDetails": "View details",
     "details": "Details",
     "notFound": "Product not found",
     "backToList": "Back to list",
@@ -88,4 +125,3 @@
     "youSave": "You save"
   }
 }
-
