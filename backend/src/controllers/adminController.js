@@ -7,6 +7,14 @@ export const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Vérifier que les secrets JWT sont configurés
+    if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+      console.error("❌ JWT_SECRET ou JWT_REFRESH_SECRET manquant dans .env");
+      return res.status(500).json({ 
+        message: "Erreur de configuration serveur. Contactez l'administrateur." 
+      });
+    }
+
     const admin = await Admin.findOne({ email });
     if (!admin) return res.status(400).json({ message: "Admin non trouvé" });
 

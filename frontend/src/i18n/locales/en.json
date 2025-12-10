@@ -56,7 +56,10 @@
     "features": "Features",
     "feature1": "Delivery throughout Tunisia",
     "feature2": "Quality guarantee",
-    "feature3": "30-day return"
+    "feature3": "30-day return",
+    "limitedStock": "Limited stock",
+    "rating": "Rating",
+    "orderConfirmation": "Are you sure you want to place this order?"
   },
   "orders": {
     "title": "Orders",

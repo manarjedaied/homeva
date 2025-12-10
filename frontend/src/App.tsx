@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
@@ -21,6 +22,35 @@ function App() {
             <Route path="/orders" element={<Orders />} />
           </Routes>
         </Layout>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 5000,
+            style: {
+              background: 'var(--bg-primary)',
+              color: 'var(--text-primary)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              fontSize: '16px',
+              fontWeight: '500',
+            },
+            success: {
+              iconTheme: {
+                primary: '#4caf50',
+                secondary: '#fff',
+              },
+              duration: 5000,
+            },
+            error: {
+              iconTheme: {
+                primary: '#f44336',
+                secondary: '#fff',
+              },
+              duration: 5000,
+            },
+          }}
+        />
       </BrowserRouter>
     </ThemeProvider>
   );

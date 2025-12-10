@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 import i18n from "../i18n/config";
 import { productAPI, orderAPI, settingsAPI, Settings } from "../services/api";
 import { Product } from "../types";
@@ -133,6 +134,7 @@ export const ProductDetails: React.FC = () => {
   // -------------------------
   const submitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setSubmitting(true);
     setOrderMessage(null);
 
@@ -165,8 +167,15 @@ export const ProductDetails: React.FC = () => {
         deliveryType: "domicile"
       } as any);
 
+      // Afficher la notification de succès avec toast
+      toast.success(t("orders.orderSuccess"), {
+        duration: 5000,
+        icon: "✅",
+      });
+      
       setOrderMessage({ type: "success", text: t("orders.orderSuccess") });
 
+      // Réinitialiser le formulaire après 5 secondes
       setTimeout(() => {
         setForm({
           clientName: "",
@@ -176,8 +185,12 @@ export const ProductDetails: React.FC = () => {
           quantity: 1,
         });
         setOrderMessage(null);
-      }, 2000);
+      }, 5000);
     } catch (err) {
+      toast.error(t("orders.orderError"), {
+        duration: 5000,
+        icon: "❌",
+      });
       setOrderMessage({ type: "error", text: t("orders.orderError") });
     } finally {
       setSubmitting(false);
@@ -227,6 +240,24 @@ export const ProductDetails: React.FC = () => {
           )}
 
           <h1 className="product-title">{product.name}</h1>
+          
+          {/* Badge Stock limité */}
+          {product.stockLimite && (
+            <div className="limited-stock-badge">
+              <span className="limited-stock-icon">⚠️</span>
+              <span>{t("products.limitedStock")}</span>
+            </div>
+          )}
+
+          {/* Rating - 5 étoiles statiques */}
+          <div className="product-rating">
+            <div className="stars-container">
+              {[...Array(5)].map((_, index) => (
+                <span key={index} className="star filled">★</span>
+              ))}
+            </div>
+            <span className="rating-text">{t("products.rating")}: 5.0</span>
+          </div>
           
           {/* Prix avec gestion de la promo */}
           <div className="product-price-wrapper">
@@ -293,7 +324,7 @@ export const ProductDetails: React.FC = () => {
               <div className="form-group">
                 <label>{t("orders.phone")} *</label>
                 <input
-                  type="tel"
+                  type="number"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />
