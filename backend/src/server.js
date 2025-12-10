@@ -10,6 +10,21 @@ import settingsRoutes from "./routes/settingsRoutes.js";
 
 dotenv.config();
 
+// Vérifier que les variables d'environnement critiques sont chargées
+if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+  console.error("❌ ERREUR: JWT_SECRET ou JWT_REFRESH_SECRET manquant dans .env");
+  console.error("Assurez-vous que le fichier .env existe dans le dossier backend/");
+  console.error("Et qu'il contient JWT_SECRET et JWT_REFRESH_SECRET");
+  process.exit(1);
+}
+
+if (!process.env.MONGO_URI) {
+  console.error("❌ ERREUR: MONGO_URI manquant dans .env");
+  process.exit(1);
+}
+
+console.log("✅ Variables d'environnement chargées avec succès");
+
 const app = express();
 
 // Middlewares

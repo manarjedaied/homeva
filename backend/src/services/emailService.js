@@ -245,8 +245,8 @@ export const sendOrderNotification = async (order) => {
     }
     
     // Vérifier que l'email est configuré
-    const recipientEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
-    if (!recipientEmail) {
+    const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
+    if (!adminEmail) {
       console.warn('⚠️  Email de notification non configuré. Définissez ADMIN_EMAIL ou EMAIL_USER dans .env');
       return { success: false, error: 'Email non configuré' };
     }
@@ -275,9 +275,20 @@ export const sendOrderNotification = async (order) => {
     // Format EMAIL_FROM : peut être juste l'email ou "Nom <email>"
     const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@homeva.com';
     
+    // Construire la liste des destinataires (plusieurs emails supportés)
+    const recipients = [adminEmail];
+    
+    // Ajouter ADMIN_EMAIL_2 si défini
+    if (process.env.ADMIN_EMAIL_2) {
+      recipients.push(process.env.ADMIN_EMAIL_2);
+    }
+    
+    // Supprimer les doublons et les valeurs vides
+    const uniqueRecipients = [...new Set(recipients.filter(email => email && email.trim()))];
+    
     const mailOptions = {
       from: fromEmail,
-      to: recipientEmail,
+      to: uniqueRecipients.join(', '), // Nodemailer accepte plusieurs emails séparés par des virgules
       subject: emailContent.subject,
       html: emailContent.html,
       text: emailContent.text,

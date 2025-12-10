@@ -21,22 +21,27 @@ export const AdminOrders: React.FC = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) {
+        setLoading(true);
+      }
       const data = await adminOrderAPI.getAll();
       setOrders(data as Order[]);
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
       await adminOrderAPI.updateStatus(id, newStatus);
-      fetchOrders();
+      // Mettre à jour sans afficher le loading
+      await fetchOrders(false);
       setShowCancelConfirm(null);
     } catch (error) {
       console.error('Error updating order status:', error);
@@ -44,16 +49,16 @@ export const AdminOrders: React.FC = () => {
     }
   };
 
-  const handleAccept = (order: Order) => {
-    handleStatusChange(order._id, 'En cours');
+  const handleAccept = async (order: Order) => {
+    await handleStatusChange(order._id, 'En cours');
   };
 
   const handleReject = (order: Order) => {
     setShowCancelConfirm(order._id);
   };
 
-  const confirmReject = (orderId: string) => {
-    handleStatusChange(orderId, 'Annulé');
+  const confirmReject = async (orderId: string) => {
+    await handleStatusChange(orderId, 'Annulé');
   };
 
   const getProductName = (order: Order): string => {
@@ -512,6 +517,7 @@ export const AdminOrders: React.FC = () => {
                         {isNew && (
                           <>
                             <button
+                              type="button"
                               className="admin-btn-accept"
                               onClick={() => handleAccept(order)}
                               title="Accepter la commande"
@@ -519,6 +525,7 @@ export const AdminOrders: React.FC = () => {
                               ✓ Accepter
                             </button>
                             <button
+                              type="button"
                               className="admin-btn-reject"
                               onClick={() => handleReject(order)}
                               title="Refuser la commande"
@@ -528,15 +535,31 @@ export const AdminOrders: React.FC = () => {
                           </>
                         )}
                         {order.status === 'En cours' && (
-                          <button
-                            className="admin-btn-primary"
-                            onClick={() => handleStatusChange(order._id, 'Terminé')}
-                            title="Marquer comme terminé"
-                          >
-                            ✓ Terminer
-                          </button>
+                          <>
+                            <button
+                              type="button"
+                              className="admin-btn-primary"
+                              onClick={() => handleStatusChange(order._id, 'Terminé')}
+                              title="Marquer comme terminé"
+                            >
+                              ✓ Terminer
+                            </button>
+                            <button
+                              type="button"
+                              className="admin-btn-reject"
+                              onClick={() => {
+                                if (window.confirm('Êtes-vous sûr de vouloir annuler cette commande ? (Vous n\'avez pas reçu l\'argent)')) {
+                                  handleStatusChange(order._id, 'Nouveau');
+                                }
+                              }}
+                              title="Annuler la commande"
+                            >
+                              ✕ Annuler
+                            </button>
+                          </>
                         )}
                         <button
+                          type="button"
                           className="admin-btn-view"
                           onClick={() => setSelectedOrder(order)}
                           title="Voir les détails"
@@ -544,6 +567,7 @@ export const AdminOrders: React.FC = () => {
                           <ViewIcon />
                         </button>
                         <button
+                          type="button"
                           className="admin-btn-view"
                           onClick={() => handlePrintInvoice(order)}
                           title="Imprimer la facture"
@@ -568,12 +592,14 @@ export const AdminOrders: React.FC = () => {
             <p>Êtes-vous sûr de vouloir refuser cette commande ?</p>
             <div className="modal-actions">
               <button
+                type="button"
                 className="admin-btn-secondary"
                 onClick={() => setShowCancelConfirm(null)}
               >
                 Annuler
               </button>
               <button
+                type="button"
                 className="admin-btn-reject"
                 onClick={() => confirmReject(showCancelConfirm)}
               >
@@ -707,6 +733,7 @@ export const AdminOrders: React.FC = () => {
               {selectedOrder.status === 'Nouveau' && (
                 <>
                   <button
+                    type="button"
                     className="admin-btn-accept"
                     onClick={() => {
                       handleAccept(selectedOrder);
@@ -716,6 +743,7 @@ export const AdminOrders: React.FC = () => {
                     ✓ Accepter
                   </button>
                   <button
+                    type="button"
                     className="admin-btn-reject"
                     onClick={() => {
                       handleReject(selectedOrder);
@@ -727,17 +755,33 @@ export const AdminOrders: React.FC = () => {
                 </>
               )}
               {selectedOrder.status === 'En cours' && (
-                <button
-                  className="admin-btn-primary"
-                  onClick={() => {
-                    handleStatusChange(selectedOrder._id, 'Terminé');
-                    setSelectedOrder(null);
-                  }}
-                >
-                  ✓ Marquer comme terminé
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="admin-btn-primary"
+                    onClick={() => {
+                      handleStatusChange(selectedOrder._id, 'Terminé');
+                      setSelectedOrder(null);
+                    }}
+                  >
+                    ✓ Terminer
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-btn-reject"
+                    onClick={() => {
+                      if (window.confirm('Êtes-vous sûr de vouloir annuler cette commande ? (Vous n\'avez pas reçu l\'argent)')) {
+                        handleStatusChange(selectedOrder._id, 'Nouveau');
+                        setSelectedOrder(null);
+                      }
+                    }}
+                  >
+                    ✕ Annuler
+                  </button>
+                </>
               )}
               <button
+                type="button"
                 className="admin-btn-secondary"
                 onClick={() => setSelectedOrder(null)}
               >

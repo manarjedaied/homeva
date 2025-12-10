@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const Home: React.FC = () => {
   const { t } = useTranslation();
+  const [hasShownWelcome, setHasShownWelcome] = useState(false);
+
+  useEffect(() => {
+    // Afficher l'animation de bienvenue une seule fois au chargement
+    if (!hasShownWelcome) {
+      toast.success(
+        `🎉 ${t('home.title')}\n${t('home.subtitle')}`,
+        {
+          duration: 5000,
+          icon: '🏠',
+          style: {
+            fontSize: '16px',
+            padding: '20px',
+            textAlign: 'center',
+            lineHeight: '1.6',
+          },
+        }
+      );
+      setHasShownWelcome(true);
+    }
+  }, [hasShownWelcome, t]);
 
   return (
     <div className="home-page">
