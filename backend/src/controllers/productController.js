@@ -111,8 +111,16 @@ export const addProduct = async (req, res) => {
       customDeliveryFee
     } = req.body;
 
-    // Images uploadées
-    const images = req.files?.map(file => `/uploads/${file.filename}`) || [];
+    // Images uploadées sur Cloudinary
+    const images = req.files?.map(file => {
+      const imageUrl = file.path; // URL Cloudinary complète
+      console.log('✅ Image uploadée sur Cloudinary:', imageUrl);
+      return imageUrl;
+    }) || [];
+    
+    if (images.length > 0) {
+      console.log(`📸 ${images.length} image(s) uploadée(s) avec succès sur Cloudinary`);
+    }
 
     const product = new Product({
       name,
@@ -144,6 +152,7 @@ export const addProduct = async (req, res) => {
     });
 
   } catch (error) {
+    console.error('❌ Erreur lors de l\'upload sur Cloudinary:', error);
     res.status(500).json({ message: "Erreur création produit", error: error.message });
   }
 };
@@ -180,9 +189,14 @@ export const updateProduct = async (req, res) => {
       updatedData.customDeliveryFee = parseNullableValue(updatedData.customDeliveryFee) ? parseFloat(updatedData.customDeliveryFee) : null;
     }
 
-    // Si nouvelles images uploadées
+    // Si nouvelles images uploadées sur Cloudinary
     if (req.files && req.files.length > 0) {
-      updatedData.images = req.files.map(file => `/uploads/${file.filename}`);
+      updatedData.images = req.files.map(file => {
+        const imageUrl = file.path; // URL Cloudinary complète
+        console.log('✅ Image uploadée sur Cloudinary:', imageUrl);
+        return imageUrl;
+      });
+      console.log(`📸 ${req.files.length} nouvelle(s) image(s) uploadée(s) avec succès sur Cloudinary`);
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -222,6 +236,7 @@ export const updateProduct = async (req, res) => {
     });
 
   } catch (error) {
+    console.error('❌ Erreur lors de l\'upload sur Cloudinary:', error);
     res.status(400).json({ message: "Erreur mise à jour produit", error: error.message });
   }
 };
