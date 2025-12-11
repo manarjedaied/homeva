@@ -1,6 +1,19 @@
 import { Product, Order } from '../types';
 
 const API_BASE_URL = '/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Fonction pour construire l'URL complète d'une image
+// Gère les URLs Cloudinary (déjà complètes) et les URLs locales (relatives)
+export const getImageUrl = (imagePath: string | undefined | null): string => {
+  if (!imagePath) return '';
+  // Si l'URL est déjà complète (commence par http/https), la retourner telle quelle (Cloudinary)
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  // Sinon, c'est une URL relative (local), ajouter l'URL du backend
+  return imagePath.startsWith('/') ? `${API_URL}${imagePath}` : `${API_URL}/${imagePath}`;
+};
 
 // Fonction utilitaire pour les appels API
 async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> {

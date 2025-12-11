@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { productAPI } from "../services/api";
+import { productAPI, getImageUrl } from "../services/api";
 import { Product } from "../types";
 import { formatPrice } from "../utils/formatPrice";
 import { useTranslation } from "react-i18next";
@@ -57,7 +57,6 @@ export const Products: React.FC = () => {
       </div>
     );
   }
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   return (
     <div className="products-page">
@@ -96,7 +95,7 @@ onClick={() => setSelectedCategory(category || "all")}
 
             const firstImage =
               product.images && product.images.length > 0
-                ? `${API_URL}${product.images[0]}`
+                ? getImageUrl(product.images[0])
                 : "https://via.placeholder.com/300x300?text=Produit";
 
             return (
