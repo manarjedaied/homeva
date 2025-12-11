@@ -1,21 +1,5 @@
 import multer from "multer";
-import path from "path";
-
-// Stockage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      Date.now() +
-        "-" +
-        Math.round(Math.random() * 1e9) +
-        path.extname(file.originalname)
-    );
-  },
-});
+import { storage } from "../config/cloudinary.js";
 
 // Liste complète des images supportées
 const allowedImageTypes = [

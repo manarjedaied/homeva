@@ -28,7 +28,14 @@ console.log("✅ Variables d'environnement chargées avec succès");
 const app = express();
 
 // Middlewares
-app.use(cors());
+// Configuration CORS - permet toutes les origines en développement
+// Pour la production, vous pouvez restreindre aux origines de votre frontend
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*', // '*' = toutes les origines, ou spécifiez votre URL frontend
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Connexion DB
@@ -41,7 +48,13 @@ app.get("/", (req, res) => {
 
 // Lancement du serveur
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Serveur démarré sur http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+  console.log(`📍 URL locale: http://localhost:${PORT}`);
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    console.log(`🌐 URL publique: https://${process.env.RAILWAY_PUBLIC_DOMAIN}`);
+  }
+});
 
 
 app.use("/api/products", productRoutes);
@@ -49,5 +62,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/settings", settingsRoutes);
+// Route statique pour les anciennes images locales (peut être supprimée après migration vers Cloudinary)
 app.use("/uploads", express.static("uploads"));
 

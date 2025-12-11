@@ -3,10 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import i18n from "../i18n/config";
-import { productAPI, orderAPI, settingsAPI, Settings } from "../services/api";
+import { productAPI, orderAPI, settingsAPI, Settings, getImageUrl } from "../services/api";
 import { Product } from "../types";
 import { formatPrice } from "../utils/formatPrice";
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -124,9 +123,7 @@ export const ProductDetails: React.FC = () => {
   const totalPrice = priceAfterDiscount + finalDeliveryFee;
 
   const images = product.images && product.images.length
-    ? product.images.map(img =>
-        img.startsWith("http") ? img : API_URL + img
-      )
+    ? product.images.map(img => getImageUrl(img))
     : [];
 
   // -------------------------
