@@ -15,3 +15,4 @@ export default defineConfig({
   },
 })
 
+//proxy pour le dev local, en prod le frontend et backend sont séparés
