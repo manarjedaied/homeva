@@ -2,7 +2,7 @@ import { Product, Order } from '../types';
 
 //const API_BASE_URL = '/api';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const API_BASE_URL = API_URL;
+const API_BASE_URL = `${API_URL}/api`;
 // Fonction pour construire l'URL complète d'une image
 // Gère les URLs Cloudinary (déjà complètes) et les URLs locales (relatives)
 export const getImageUrl = (imagePath: string | undefined | null): string => {
