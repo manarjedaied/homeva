@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
 import { MoonIcon, SunIcon } from '../icons/ThemeIcons';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { adminStorage } from '../../utils/storage';
+import  adminStorage  from '../../utils/storage';
 
 export const AdminNavbar: React.FC = () => {
   const { t } = useTranslation();
