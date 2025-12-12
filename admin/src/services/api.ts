@@ -1,7 +1,7 @@
 import { Product, Order, Category } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+//const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 // Fonction pour construire l'URL complète d'une image
 export const getImageUrl = (imagePath: string | undefined | null): string => {
