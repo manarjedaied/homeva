@@ -8,6 +8,7 @@ import { ProductDetails } from './pages/ProductDetails';
 import { Orders } from './pages/Orders';
 import './i18n/config';
 import './styles/global.css';
+import { OrderSuccess } from './pages/OrderSuccess';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
+
           </Routes>
         </Layout>
         <Toaster
