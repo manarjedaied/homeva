@@ -166,9 +166,22 @@ export const ProductDetails: React.FC = () => {
 
       // Afficher la notification de succès avec toast
       toast.success(t("orders.orderSuccess"), {
-        duration: 5000,
-        icon: "✅",
-      });
+  duration: 3000,
+  icon: "✅",
+});
+
+// Redirection avec récap commande
+navigate("/order-success", {
+  state: {
+    productName: product.name,
+    quantity: form.quantity,
+    totalPrice: totalPrice,
+    phone: form.phone,
+    ville: form.ville,
+    deliveryType: "Livraison à domicile"
+  }
+});
+
       
       setOrderMessage({ type: "success", text: t("orders.orderSuccess") });
 
