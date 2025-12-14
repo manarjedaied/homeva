@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { formatPrice } from "../utils/formatPrice";
+
+declare global {
+  interface Window {
+    fbq?: (action: string, event: string, data?: Record<string, any>) => void;
+  }
+}
 
 export const OrderSuccess: React.FC = () => {
   const { t } = useTranslation();
@@ -9,6 +15,14 @@ export const OrderSuccess: React.FC = () => {
   const location = useLocation();
 
   const order = location.state as any;
+useEffect(() => {
+  if (window.fbq && order) {
+    window.fbq("track", "Purchase", {
+      value: order.totalPrice,
+      currency: "TND",
+    });
+  }
+}, [order]);
 
   if (!order) {
     navigate("/");

@@ -122,21 +122,19 @@
     "total": "Total",
     "freeDelivery": "Free",
     "discount": "Discount",
-    "youSave": "You save"
-  },
-  "orders": {
-  "thankYou": "Thank you for your order 🙏",
-  "successMessage": "Your order has been received successfully. Our team will contact you shortly to confirm it.",
-  "orderSummary": "Order summary",
-  "product": "Product",
-  "quantityLabel": "Quantity",
-  "city": "City",
-  "deliveryType": "Delivery",
-  "totalAmount": "Total",
-  "needHelp": "Need help?",
-  "callUs": "Call us",
-  "contactWhatsapp": "Contact on WhatsApp",
-  "continueShopping": "Continue shopping"
-}
+    "youSave": "You save",
+    "thankYou": "Thank you for your order 🙏",
+    "successMessage": "Your order has been received successfully. Our team will contact you shortly to confirm it.",
+    "orderSummary": "Order summary",
+    "product": "Product",
+    "quantityLabel": "Quantity",
+    "city": "City",
+    "deliveryType": "Delivery",
+    "totalAmount": "Total",
+    "needHelp": "Need help?",
+    "callUs": "Call us",
+    "contactWhatsapp": "Contact on WhatsApp",
+    "continueShopping": "Continue shopping"
+  }
 
 }

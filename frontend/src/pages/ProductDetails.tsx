@@ -35,6 +35,18 @@ export const ProductDetails: React.FC = () => {
   // Fetch product and settings
   // -------------------------
   useEffect(() => {
+  if (window.fbq && product) {
+    window.fbq("track", "ViewContent", {
+      content_name: product.name,
+      content_ids: [product._id],
+      content_type: "product",
+      value: product.price,
+      currency: "TND",
+    });
+  }
+}, [product]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
