@@ -15,14 +15,19 @@ export const OrderSuccess: React.FC = () => {
   const location = useLocation();
 
   const order = location.state as any;
-useEffect(() => {
-  if (window.fbq && order) {
-    window.fbq("track", "Purchase", {
-      value: order.totalPrice,
-      currency: "TND",
-    });
-  }
-}, [order]);
+  useEffect(() => {
+    if (window.fbq && order) {
+      // Créer un event_id unique ou récupérer celui généré côté serveur
+      const eventId = order._id || `order_${Date.now()}`; // si tu as l'id de la commande depuis MongoDB
+      
+      window.fbq("track", "Purchase", {
+        value: order.totalPrice,
+        currency: "TND",
+        event_id: eventId, // 🔑 Ajouter ici
+      });
+    }
+  }, [order]);
+  
 
   if (!order) {
     navigate("/");
