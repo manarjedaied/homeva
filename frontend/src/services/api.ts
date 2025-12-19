@@ -31,6 +31,13 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> 
 
   return response.json();
 }
+const generateEventId = (): string => {
+  if (window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID(); // UUID v4 moderne
+  }
+  // fallback si navigateur plus ancien
+  return `order_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+};
 
 // API Products
 export const productAPI = {
@@ -55,18 +62,26 @@ export const productAPI = {
 // API Orders
 export const orderAPI = {
   getAll: (): Promise<Order[]> => fetchAPI<Order[]>('/orders'),
-  create: (order: Omit<Order, '_id' | 'createdAt' | 'updatedAt'>): Promise<Order> =>
-    fetchAPI<Order>('/orders', {
+
+  create: (order: Omit<Order, '_id' | 'createdAt' | 'updatedAt'>): Promise<Order> => {
+    // Ajouter event_id unique avant envoi au backend
+    const orderWithEventId = {
+      ...order,
+      event_id: generateEventId(),
+    };
+
+    return fetchAPI<Order>('/orders', {
       method: 'POST',
-      body: JSON.stringify(order),
-    }),
+      body: JSON.stringify(orderWithEventId),
+    });
+  },
+
   updateStatus: (id: string, status: Order['status']): Promise<Order> =>
     fetchAPI<Order>(`/orders/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status }),
     }),
 };
-
 // API Settings
 export interface Settings {
   _id?: string;

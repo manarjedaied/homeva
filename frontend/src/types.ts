@@ -35,6 +35,7 @@ export interface Order {
   }>;
   totalAmount: number;
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  event_id?: string;
   createdAt?: string;
   updatedAt?: string;
 }
