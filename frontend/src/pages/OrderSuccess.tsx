@@ -54,7 +54,8 @@ export const OrderSuccess: React.FC = () => {
 
           <div className="summary-row total">
             <span>{t("orders.totalAmount")} :</span>
-            <strong>{formatPrice(order.totalAmount)}</strong>
+
+          <strong>{formatPrice(order?.totalAmount ?? 0)}</strong>
           </div>
         </div>
 
