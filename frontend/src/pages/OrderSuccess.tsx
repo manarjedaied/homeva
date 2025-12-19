@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { formatPrice } from "../utils/formatPrice";
+import { Order } from "../types";
 
 declare global {
   interface Window {
@@ -14,20 +15,20 @@ export const OrderSuccess: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const order = location.state as any;
+  const order = location.state as Order | null;
+
   useEffect(() => {
     if (window.fbq && order) {
-      // Créer un event_id unique ou récupérer celui généré côté serveur
-      const eventId = order._id || `order_${Date.now()}`; // si tu as l'id de la commande depuis MongoDB
-      
+      // 🔹 Utiliser le même event_id envoyé au backend
+      const eventId = order.event_id || order._id || `order_${Date.now()}`;
+
       window.fbq("track", "Purchase", {
-        value: order.totalPrice,
+        value: order.totalAmount,
         currency: "TND",
-        event_id: eventId, // 🔑 Ajouter ici
+        event_id: eventId,
       });
     }
   }, [order]);
-  
 
   if (!order) {
     navigate("/");
@@ -37,61 +38,34 @@ export const OrderSuccess: React.FC = () => {
   return (
     <div className="order-success-page">
       <div className="order-success-card">
-        {/* ICON */}
         <div className="success-icon">✅</div>
-
-        {/* TITLE */}
         <h1>{t("orders.thankYou")}</h1>
+        <p className="success-message">{t("orders.successMessage")}</p>
 
-        {/* MESSAGE */}
-        <p className="success-message">
-          {t("orders.successMessage")}
-        </p>
-
-        {/* ORDER SUMMARY */}
         <div className="order-summary">
           <h3>🧾 {t("orders.orderSummary")}</h3>
 
-          <div className="summary-row">
-            <span>{t("orders.product")} :</span>
-            <strong>{order.productName}</strong>
-          </div>
-
-          <div className="summary-row">
-            <span>{t("orders.quantityLabel")} :</span>
-            <strong>{order.quantity}</strong>
-          </div>
-
-          <div className="summary-row">
-            <span>{t("orders.city")} :</span>
-            <strong>{order.ville}</strong>
-          </div>
-
-          <div className="summary-row">
-            <span>{t("orders.deliveryType")} :</span>
-            <strong>{order.deliveryType}</strong>
-          </div>
+          {order.products.map((p, idx) => (
+            <div key={idx} className="summary-row">
+              <span>{t("orders.product")} :</span>
+              <strong>{p.productId}</strong>
+            </div>
+          ))}
 
           <div className="summary-row total">
             <span>{t("orders.totalAmount")} :</span>
-            <strong>{formatPrice(order.totalPrice)}</strong>
+            <strong>{formatPrice(order.totalAmount)}</strong>
           </div>
         </div>
 
-        {/* CONTACT */}
         <div className="contact-support">
           <p>📞 {t("orders.needHelp")}</p>
-
-            <p>
+          <p>
             {t("orders.callUs")} :
-            <strong
-                style={{ direction: "ltr", unicodeBidi: "embed" }}
-            >
-                +216 94877906
+            <strong style={{ direction: "ltr", unicodeBidi: "embed" }}>
+              +216 94877906
             </strong>
-            </p>
-
-
+          </p>
           <a
             className="whatsapp-link"
             href="https://wa.me/21694877906"
@@ -102,11 +76,7 @@ export const OrderSuccess: React.FC = () => {
           </a>
         </div>
 
-        {/* CTA */}
-        <button
-          className="btn-back-home"
-          onClick={() => navigate("/products")}
-        >
+        <button className="btn-back-home" onClick={() => navigate("/products")}>
           {t("orders.continueShopping")}
         </button>
       </div>
