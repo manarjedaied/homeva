@@ -45,7 +45,7 @@ export const OrderSuccess: React.FC = () => {
         <div className="order-summary">
           <h3>🧾 {t("orders.orderSummary")}</h3>
 
-          {order.products.map((p, idx) => (
+          {order.products?.map((p, idx) => (
             <div key={idx} className="summary-row">
               <span>{t("orders.product")} :</span>
               <strong>{p.productId}</strong>
