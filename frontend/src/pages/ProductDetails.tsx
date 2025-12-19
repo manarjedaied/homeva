@@ -159,7 +159,13 @@ export const ProductDetails: React.FC = () => {
         phone: form.phone,
         ville: form.ville,
         address: form.address,
-        product: product._id,
+        products: [
+                    {
+                      productId: product._id,
+                      quantity: form.quantity,
+                      price: unitPrice,
+                    }
+                  ],    
         quantity: form.quantity,
         
         // Informations de prix
@@ -182,16 +188,26 @@ export const ProductDetails: React.FC = () => {
   icon: "✅",
 });
 
+const createdOrder = await orderAPI.create({
+  customerName: form.clientName,
+  phone: form.phone,
+  ville: form.ville,
+  address: form.address,
+  products: [
+    {
+      productId: product._id,
+      quantity: form.quantity,
+      price: unitPrice,
+    },
+  ],
+  totalAmount: totalPrice,
+} as any);
+
+
 // Redirection avec récap commande
 navigate("/order-success", {
-  state: {
-    productName: product.name,
-    quantity: form.quantity,
-    totalPrice: totalPrice,
-    phone: form.phone,
-    ville: form.ville,
-    deliveryType: "Livraison à domicile"
-  }
+   state: createdOrder,
+
 });
 
       
