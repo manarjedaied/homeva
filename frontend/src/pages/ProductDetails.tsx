@@ -154,7 +154,7 @@ export const ProductDetails: React.FC = () => {
     }
 
     try {
-      await orderAPI.create({
+      const createdOrder = await orderAPI.create({
         clientName: form.clientName,
         phone: form.phone,
         ville: form.ville,
@@ -185,6 +185,7 @@ export const ProductDetails: React.FC = () => {
 // Redirection avec récap commande
 navigate("/order-success", {
   state: {
+    _id: createdOrder._id,
     productName: product.name,
     quantity: form.quantity,
     totalPrice: totalPrice,
