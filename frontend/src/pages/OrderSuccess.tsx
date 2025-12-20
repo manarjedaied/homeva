@@ -19,6 +19,7 @@ useEffect(() => {
   if (window.fbq && order) {
     window.fbq("track", "Purchase", {
       value: order.totalPrice,
+      currency: "TND",
       event_id: order._id.toString(),
     });
   }
