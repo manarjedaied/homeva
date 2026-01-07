@@ -538,16 +538,7 @@ navigate("/order-success", {
               </div>
             </form>
           </div>
-          {/* 
-<div className="product-landing">
-  <img
-    src="/img/land.png"
-    alt="Landing promotion"
-    className="product-landing-image"
-  />
- */}
 
-</div>
           {/* ------------------------- */}
           {/* PRODUCT FEATURES */}
           {/* ------------------------- */}
