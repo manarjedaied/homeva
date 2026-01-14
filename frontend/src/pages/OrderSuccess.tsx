@@ -15,7 +15,7 @@ export const OrderSuccess: React.FC = () => {
   const location = useLocation();
 
   const order = location.state as any;
-useEffect(() => {
+/*useEffect(() => {
   if (window.fbq && order) {
     window.fbq("track", "Purchase", {
       value: order.totalPrice,
@@ -23,7 +23,7 @@ useEffect(() => {
       event_id: order._id.toString(),
     });
   }
-}, [order]);
+}, [order]);*/
 
   if (!order) {
     navigate("/");
