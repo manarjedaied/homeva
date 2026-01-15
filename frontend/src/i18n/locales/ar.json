@@ -135,6 +135,11 @@
     "callUs": "اتصل بنا",
     "contactWhatsapp": "التواصل عبر واتساب",
     "continueShopping": "مواصلة التسوق"
+  },
+  "reviews": {
+    "title": "آراء العملاء",
+    "subtitle": "ما يقوله عملاؤنا عنا",
+    "verified": "عملية شراء موثقة"
   }
 
 }
