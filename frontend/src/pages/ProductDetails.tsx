@@ -6,6 +6,7 @@ import i18n from "../i18n/config";
 import { productAPI, orderAPI, settingsAPI, Settings, getImageUrl } from "../services/api";
 import { Product } from "../types";
 import { formatPrice } from "../utils/formatPrice";
+import reviewsData from "../data/reviews.json";
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +31,17 @@ export const ProductDetails: React.FC = () => {
     address: "",
     quantity: 1,
   });
+
+  // -------------------------
+  // Random Reviews Selection
+  // -------------------------
+  const [randomReviews, setRandomReviews] = useState<typeof reviewsData>([]);
+
+  useEffect(() => {
+    // Sélectionner 4 avis aléatoires
+    const shuffled = [...reviewsData].sort(() => 0.5 - Math.random());
+    setRandomReviews(shuffled.slice(0, 4));
+  }, []);
 
   // -------------------------
   // Fetch product and settings
@@ -536,6 +548,39 @@ navigate("/order-success", {
                 </button>
               </div>
             </form>
+          </div>
+
+          {/* ------------------------- */}
+          {/* CUSTOMER REVIEWS */}
+          {/* ------------------------- */}
+          <div className="customer-reviews-section">
+            <div className="reviews-header">
+              <h3>{t("reviews.title")}</h3>
+              <p className="reviews-subtitle">{t("reviews.subtitle")}</p>
+            </div>
+            <div className="reviews-grid">
+              {randomReviews.map((review) => (
+                <div key={review.id} className="review-card">
+                  <div className="review-header">
+                    <div className="reviewer-info">
+                      <div className="reviewer-avatar">
+                        {review.name.charAt(0)}
+                      </div>
+                      <div className="reviewer-details">
+                        <h4 className="reviewer-name">{review.name}</h4>
+                        <span className="review-verified">✓ {t("reviews.verified")}</span>
+                      </div>
+                    </div>
+                    <div className="review-rating">
+                      {[...Array(review.rating)].map((_, i) => (
+                        <span key={i} className="star">⭐</span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="review-comment">{review.comment}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* ------------------------- */}

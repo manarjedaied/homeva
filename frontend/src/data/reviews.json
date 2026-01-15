@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "فاطمة بن صالح",
+    "rating": 5,
+    "comment": "منتج ذو جودة عالية جداً! التوصيل سريع والخدمة ممتازة. أنصح به بشدة.",
+    "date": "2025-12-15"
+  },
+  {
+    "id": 2,
+    "name": "ليلى خميس",
+    "rating": 5,
+    "comment": "راضية جداً عن الشراء. المنتج يطابق الوصف تماماً. خدمة لا تشوبها شائبة!",
+    "date": "2025-12-18"
+  },
+  {
+    "id": 3,
+    "name": "أميرة شودري",
+    "rating": 5,
+    "comment": "تجربة شراء ممتازة! منتج بجودة عالية والتوصيل في الموعد المحدد.",
+    "date": "2025-12-20"
+  },
+  {
+    "id": 4,
+    "name": "Nadia Bouaziz",
+    "rating": 5,
+    "comment": "Je suis ravie de ma commande. Produit magnifique et emballage soigné. Merci beaucoup !",
+    "date": "2025-12-22"
+  },
+  {
+    "id": 5,
+    "name": "ياسمين الظاهري",
+    "rating": 5,
+    "comment": "مثالي! جودة استثنائية وخدمة العملاء سريعة جداً. أوصي به 100%.",
+    "date": "2025-12-25"
+  },
+  {
+    "id": 6,
+    "name": "سميرة بلحاج",
+    "rating": 5,
+    "comment": "سعيدة جداً بالشراء. المنتج أجمل من الصورة. التوصيل سريع.",
+    "date": "2025-12-28"
+  },
+  {
+    "id": 7,
+    "name": "هناء مزوغي",
+    "rating": 5,
+    "comment": "جودة ممتازة! أنا معجبة بالعناية في التغليف. الخدمة رائعة!",
+    "date": "2025-12-30"
+  },
+  {
+    "id": 8,
+    "name": "دينا حراث",
+    "rating": 5,
+    "comment": "المنتج يلبي توقعاتي. التوصيل سريع ومرتب. أنصح به دون تردد.",
+    "date": "2026-01-02"
+  },
+  {
+    "id": 9,
+    "name": "رانيا النويرة",
+    "rating": 5,
+    "comment": "منتج رائع! الجودة ممتازة والسعر تنافسي. سأطلب مرة أخرى.",
+    "date": "2026-01-05"
+  },
+  {
+    "id": 10,
+    "name": "Lina Karoui",
+    "rating": 5,
+    "comment": "Très satisfaite ! Le produit est magnifique et la livraison a été très rapide. Parfait !",
+    "date": "2026-01-07"
+  },
+  {
+    "id": 11,
+    "name": "سلمى الرقيق",
+    "rating": 5,
+    "comment": "متجر ممتاز! منتجات عالية الجودة وخدمة عملاء استثنائية. أنصح به بشدة.",
+    "date": "2026-01-08"
+  },
+  {
+    "id": 12,
+    "name": "زهرة الشلبي",
+    "rating": 5,
+    "comment": "جودة جميلة جداً وتوصيل محترم. أنا مسرورة بشرائي. شكراً!",
+    "date": "2026-01-09"
+  },
+  {
+    "id": 13,
+    "name": "مريم عبود",
+    "rating": 5,
+    "comment": "منتج مثالي! التغليف محترم والتوصيل سريع. خدمة العملاء محترفة جداً.",
+    "date": "2026-01-10"
+  },
+  {
+    "id": 14,
+    "name": "Khaoula Ridha",
+    "rating": 5,
+    "comment": "Je suis très contente de mon achat. Qualité excellente et prix raisonnable. Je recommande !",
+    "date": "2026-01-11"
+  },
+  {
+    "id": 15,
+    "name": "سناء محجوب",
+    "rating": 5,
+    "comment": "تجربة شراء مثالية! المنتج رائع والخدمة لا تشوبها شائبة. شكراً جزيلاً!",
+    "date": "2026-01-12"
+  },
+  {
+    "id": 16,
+    "name": "إيناس حمادي",
+    "rating": 5,
+    "comment": "راضية جداً! المنتج بجودة عالية والتوصيل كان سريع. ممتاز!",
+    "date": "2026-01-13"
+  },
+  {
+    "id": 17,
+    "name": "زينة النصري",
+    "rating": 5,
+    "comment": "جودة ممتازة وخدمة لا تقبل المنافسة. أنصح بهذا المتجر وعيني مغمضة!",
+    "date": "2026-01-14"
+  },
+  {
+    "id": 18,
+    "name": "Nadira Bayoudh",
+    "rating": 5,
+    "comment": "Produit magnifique et conforme à la description. Livraison soignée et rapide. Parfait !",
+    "date": "2026-01-14"
+  },
+  {
+    "id": 19,
+    "name": "جليلة بوزيدي",
+    "rating": 5,
+    "comment": "أنا سعيدة جداً بشرائي! الجودة في القمة والخدمة سريعة. شكراً!",
+    "date": "2026-01-15"
+  },
+  {
+    "id": 20,
+    "name": "Aïda Turki",
+    "rating": 5,
+    "comment": "Excellente expérience ! Produit de qualité supérieure et livraison express. Je recommande !",
+    "date": "2026-01-15"
+  }
+]

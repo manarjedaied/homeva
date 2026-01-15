@@ -135,6 +135,11 @@
     "callUs": "Call us",
     "contactWhatsapp": "Contact on WhatsApp",
     "continueShopping": "Continue shopping"
+  },
+  "reviews": {
+    "title": "Customer reviews",
+    "subtitle": "What our customers say about us",
+    "verified": "Verified purchase"
   }
 
 }
