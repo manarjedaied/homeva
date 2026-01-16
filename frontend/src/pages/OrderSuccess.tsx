@@ -84,7 +84,7 @@ useEffect(() => {
             <strong
                 style={{ direction: "ltr", unicodeBidi: "embed" }}
             >
-                +216 94877906
+                +216 94 877 906
             </strong>
             </p>
 
