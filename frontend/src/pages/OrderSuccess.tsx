@@ -1,5 +1,4 @@
-//import React, { useEffect } from "react";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -17,7 +16,7 @@ export const OrderSuccess: React.FC = () => {
   const location = useLocation();
 
   const order = location.state as any;
-/*useEffect(() => {
+useEffect(() => {
   if (window.fbq && order) {
     window.fbq("track", "Purchase", {
       value: order.totalPrice,
@@ -25,7 +24,7 @@ export const OrderSuccess: React.FC = () => {
       event_id: order._id.toString(),
     });
   }
-}, [order]);*/
+}, [order]);
 
   if (!order) {
     navigate("/");
