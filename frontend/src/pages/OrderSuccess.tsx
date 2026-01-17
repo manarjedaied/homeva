@@ -29,7 +29,7 @@ useEffect(() => {
       contents: [{
         id: order.productId,
         quantity: order.quantity,
-        item_price: order.totalPrice / order.quantity 
+        item_price: order.totalPrice / order.quantity
       }]
     });
   }
