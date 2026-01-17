@@ -8,6 +8,12 @@ import { Product } from "../types";
 import { formatPrice } from "../utils/formatPrice";
 import reviewsData from "../data/reviews.json";
 
+declare global {
+  interface Window {
+    fbq?: (action: string, event: string, data?: Record<string, any>) => void;
+  }
+}
+
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -166,6 +172,22 @@ export const ProductDetails: React.FC = () => {
     }
 
     try {
+      // Tracker InitiateCheckout
+      if (window.fbq) {
+        window.fbq("track", "InitiateCheckout", {
+          content_ids: [product._id],
+          content_name: product.name,
+          value: totalPrice,
+          currency: "TND",
+          num_items: form.quantity,
+          contents: [{
+            id: product._id,
+            quantity: form.quantity,
+            item_price: unitPrice
+          }]
+        });
+      }
+
       const createdOrder = await orderAPI.create({
         clientName: form.clientName,
         phone: form.phone,
@@ -198,6 +220,7 @@ export const ProductDetails: React.FC = () => {
 navigate("/order-success", {
   state: {
     _id: createdOrder._id,
+    productId: product._id,
     productName: product.name,
     quantity: form.quantity,
     totalPrice: totalPrice,

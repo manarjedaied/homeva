@@ -22,6 +22,15 @@ useEffect(() => {
       value: order.totalPrice,
       currency: "TND",
       event_id: order._id.toString(),
+      content_ids: [order.productId],
+      content_name: order.productName,
+      content_type: "product",
+      num_items: order.quantity,
+      contents: [{
+        id: order.productId,
+        quantity: order.quantity,
+        item_price: order.totalPrice / order.quantity
+      }]
     });
   }
 }, [order]);
