@@ -7,6 +7,7 @@ import { productAPI, orderAPI, settingsAPI, Settings, getImageUrl } from "../ser
 import { Product } from "../types";
 import { formatPrice } from "../utils/formatPrice";
 import reviewsData from "../data/reviews.json";
+import { DescriptiveImages } from "../components/DescriptiveImages";
 
 declare global {
   interface Window {
@@ -573,6 +574,8 @@ navigate("/order-success", {
               </div>
             </form>
           </div>
+          {/* DESCRIPTIVE IMAGES */}
+          {product._id && <DescriptiveImages productId={product._id} />}
    {/* 
 <div className="product-landing">
   <img

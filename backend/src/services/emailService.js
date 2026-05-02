@@ -1,10 +1,33 @@
 import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Initialiser SendGrid si la clé API est fournie
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
+
 // Configuration du transporteur email
-const createTransporter = () => {
+const createTransporter = (port = null, secure = null) => {
+  // Options de connexion communes pour éviter les timeouts (optimisées pour Railway)
+  const connectionOptions = {
+    connectionTimeout: 15000, // 15 secondes pour établir la connexion
+    greetingTimeout: 15000,   // 15 secondes pour le greeting SMTP
+    socketTimeout: 15000,     // 15 secondes pour les opérations socket
+    // Configuration TLS optimisée pour Railway
+    tls: {
+      rejectUnauthorized: false,
+      minVersion: 'TLSv1',
+      ciphers: 'SSLv3'
+    },
+    // Options supplémentaires pour améliorer la compatibilité
+    pool: false, // Désactiver le pool pour éviter les problèmes de connexion
+    requireTLS: false, // Ne pas exiger TLS explicitement
+    debug: process.env.EMAIL_DEBUG === 'true', // Activer le debug si nécessaire
+  };
+
   // Si SMTP personnalisé est configuré
   if (process.env.SMTP_HOST && process.env.SMTP_PORT) {
     return nodemailer.createTransport({
@@ -15,10 +38,11 @@ const createTransporter = () => {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
+      ...connectionOptions,
     });
   }
   
-  // Sinon, utiliser Gmail (plus simple pour commencer)
+  // Configuration Gmail
   const emailUser = process.env.EMAIL_USER;
   let emailPassword = process.env.EMAIL_APP_PASSWORD;
   
@@ -31,12 +55,23 @@ const createTransporter = () => {
     throw new Error('EMAIL_USER et EMAIL_APP_PASSWORD doivent être définis dans .env');
   }
   
+  // Utiliser SMTP explicite pour Gmail (recommandé pour Railway et plus fiable)
+  // Par défaut, essayer le port 587 (TLS), mais permettre de forcer 465 (SSL)
+  const usePort465 = process.env.GMAIL_USE_SSL === 'true' || (port === 465);
+  const smtpPort = port || (usePort465 ? 465 : 587);
+  const smtpSecure = secure !== null ? secure : usePort465;
+  
+  console.log(`📧 Configuration SMTP Gmail: smtp.gmail.com:${smtpPort} (secure: ${smtpSecure})`);
+  
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: smtpPort,
+    secure: smtpSecure, // true pour 465 (SSL), false pour 587 (TLS)
     auth: {
       user: emailUser,
-      pass: emailPassword, // Mot de passe d'application Gmail (16 caractères sans espaces)
+      pass: emailPassword,
     },
+    ...connectionOptions,
   });
 };
 
@@ -235,6 +270,46 @@ ID Commande: ${order._id}
   };
 };
 
+// Fonction pour envoyer via SendGrid (recommandé pour Railway)
+const sendViaSendGrid = async (emailContent, recipients, fromEmail) => {
+  if (!process.env.SENDGRID_API_KEY) {
+    throw new Error('SENDGRID_API_KEY non configuré');
+  }
+
+  // Améliorer la délivrabilité avec des en-têtes personnalisés
+  const msg = {
+    to: recipients, // SendGrid accepte un tableau d'emails
+    from: {
+      email: fromEmail.includes('<') ? fromEmail.match(/<(.+)>/)[1] : fromEmail,
+      name: fromEmail.includes('<') ? fromEmail.match(/(.+)\s*</)[1].trim() : 'Homeva'
+    },
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html,
+    // Catégorie pour le tracking SendGrid
+    categories: ['order-notification'],
+    // En-têtes personnalisés pour améliorer la délivrabilité
+    headers: {
+      'X-Entity-Ref-ID': `order-${Date.now()}`,
+      'List-Unsubscribe': `<mailto:${process.env.ADMIN_EMAIL}?subject=unsubscribe>`,
+    },
+    // Options de délivrabilité
+    mailSettings: {
+      // Désactiver le tracking de clics si nécessaire (peut aider avec certains filtres spam)
+      clickTracking: {
+        enable: false
+      },
+      // Activer le tracking d'ouverture
+      openTracking: {
+        enable: true
+      }
+    }
+  };
+
+  const response = await sgMail.send(msg);
+  return { success: true, messageId: response[0]?.headers['x-message-id'] || 'sent' };
+};
+
 // Fonction pour envoyer une notification de nouvelle commande
 export const sendOrderNotification = async (order) => {
   try {
@@ -251,14 +326,6 @@ export const sendOrderNotification = async (order) => {
       return { success: false, error: 'Email non configuré' };
     }
 
-    // Vérifier que les credentials email sont configurés
-    if (!process.env.SMTP_HOST && !process.env.EMAIL_USER) {
-      console.warn('⚠️  Configuration email manquante. Définissez SMTP_HOST ou EMAIL_USER dans .env');
-      return { success: false, error: 'Configuration email manquante' };
-    }
-
-    const transporter = createTransporter();
-    
     // Le produit devrait déjà être populate depuis le contrôleur
     // Si ce n'est pas le cas, le récupérer
     let product = order.product;
@@ -285,7 +352,61 @@ export const sendOrderNotification = async (order) => {
     
     // Supprimer les doublons et les valeurs vides
     const uniqueRecipients = [...new Set(recipients.filter(email => email && email.trim()))];
-    
+
+    // PRIORITÉ 1: Utiliser SendGrid (recommandé pour Railway)
+    if (!process.env.SENDGRID_API_KEY) {
+      console.error('❌ SENDGRID_API_KEY non configuré dans .env');
+      console.error('💡 Pour utiliser SendGrid:');
+      console.error('   1. Créez un compte sur https://sendgrid.com');
+      console.error('   2. Allez dans Settings → API Keys → Create API Key');
+      console.error('   3. Copiez la clé et ajoutez-la dans .env: SENDGRID_API_KEY="votre_clé"');
+      console.error('   4. Vérifiez votre email expéditeur dans SendGrid (Settings → Sender Authentication)');
+      return { success: false, error: 'SENDGRID_API_KEY non configuré. Voir les instructions ci-dessus.' };
+    }
+
+    try {
+      console.log('📧 Envoi de l\'email via SendGrid...');
+      const result = await sendViaSendGrid(emailContent, uniqueRecipients, fromEmail);
+      console.log('✅ Email envoyé avec succès via SendGrid!');
+      console.log('📧 Destinataires:', uniqueRecipients.join(', '));
+      return result;
+    } catch (sendGridError) {
+      console.error('❌ Erreur SendGrid:', sendGridError.message);
+      
+      // Si l'erreur est liée à l'authentification de l'expéditeur
+      if (sendGridError.response?.body?.errors) {
+        const errors = sendGridError.response.body.errors;
+        const senderError = errors.find(e => e.message?.includes('sender') || e.message?.includes('from'));
+        if (senderError) {
+          console.error('💡 IMPORTANT: Vous devez vérifier votre email expéditeur dans SendGrid:');
+          console.error('   → Allez dans SendGrid: Settings → Sender Authentication');
+          console.error('   → Cliquez sur "Verify a Single Sender"');
+          console.error('   → Entrez votre email:', fromEmail);
+          console.error('   → Vérifiez l\'email reçu de SendGrid');
+        }
+      }
+      
+      if (sendGridError.message?.includes('API key') || sendGridError.message?.includes('Unauthorized')) {
+        console.error('💡 IMPORTANT: Vérifiez votre clé API SendGrid:');
+        console.error('   → Allez dans SendGrid: Settings → API Keys');
+        console.error('   → Vérifiez que votre clé API est correcte');
+        console.error('   → Assurez-vous que la clé a les permissions "Mail Send"');
+      }
+      
+      // Fallback sur SMTP si configuré
+      if (process.env.EMAIL_USER || process.env.SMTP_HOST) {
+        console.warn('⚠️  Tentative de fallback sur SMTP...');
+        // Continuer avec SMTP en fallback (code ci-dessous)
+      } else {
+        throw sendGridError;
+      }
+    }
+
+    // PRIORITÉ 2: Fallback sur SMTP (Gmail) - seulement si SendGrid échoue et SMTP est configuré
+    if (!process.env.SMTP_HOST && !process.env.EMAIL_USER) {
+      return { success: false, error: 'Aucune méthode d\'envoi d\'email configurée' };
+    }
+
     const mailOptions = {
       from: fromEmail,
       to: uniqueRecipients.join(', '), // Nodemailer accepte plusieurs emails séparés par des virgules
@@ -294,13 +415,97 @@ export const sendOrderNotification = async (order) => {
       text: emailContent.text,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('✅ Email de notification envoyé:', info.messageId);
-    return { success: true, messageId: info.messageId };
+    // Essayer d'envoyer l'email avec retry et fallback sur différents ports
+    // Commencer par 465 (SSL) car souvent mieux supporté sur Railway
+    const portsToTry = [
+      { port: 465, secure: true, name: 'SSL' },
+      { port: 587, secure: false, name: 'TLS' }
+    ];
+    
+    let lastError = null;
+    
+    for (const portConfig of portsToTry) {
+      console.log(`🔄 Tentative d'envoi via port ${portConfig.port} (${portConfig.name})...`);
+      
+      // Créer un nouveau transporteur avec le port actuel
+      let currentTransporter = createTransporter(portConfig.port, portConfig.secure);
+      let retryCount = 0;
+      const maxRetries = 1; // Réduire à 1 tentative par port pour passer plus vite au suivant
+      let portSuccess = false;
+      
+      while (retryCount <= maxRetries && !portSuccess) {
+        try {
+          // Essayer d'envoyer l'email avec un timeout plus court
+          const sendPromise = currentTransporter.sendMail(mailOptions);
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('TIMEOUT')), 15000) // 15 secondes max par tentative
+          );
+          
+          const info = await Promise.race([sendPromise, timeoutPromise]);
+          
+          console.log(`✅ Email de notification envoyé via port ${portConfig.port} (${portConfig.name}):`, info.messageId);
+          console.log('📧 Destinataires:', uniqueRecipients.join(', '));
+          
+          // Fermer la connexion proprement
+          if (currentTransporter.close) {
+            currentTransporter.close();
+          }
+          
+          portSuccess = true;
+          return { success: true, messageId: info.messageId };
+        } catch (sendError) {
+          retryCount++;
+          lastError = sendError;
+          
+          // Fermer la connexion en cas d'erreur
+          if (currentTransporter.close) {
+            try {
+              currentTransporter.close();
+            } catch (closeError) {
+              // Ignorer les erreurs de fermeture
+            }
+          }
+          
+          const isTimeout = sendError.code === 'ETIMEDOUT' || 
+                           sendError.code === 'ECONNRESET' || 
+                           sendError.code === 'ESOCKETTIMEDOUT' ||
+                           sendError.message === 'TIMEOUT';
+          
+          // Si c'est une erreur de timeout et qu'on n'a pas encore fait tous les essais
+          if (isTimeout && retryCount <= maxRetries) {
+            console.warn(`⚠️  Tentative ${retryCount}/${maxRetries + 1} échouée sur port ${portConfig.port} (${sendError.code || sendError.message}). Nouvelle tentative dans 1 seconde...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Recréer le transporteur pour une nouvelle connexion
+            currentTransporter = createTransporter(portConfig.port, portConfig.secure);
+            continue;
+          }
+          
+          // Si toutes les tentatives ont échoué pour ce port
+          if (retryCount > maxRetries) {
+            console.warn(`❌ Échec sur le port ${portConfig.port} (${portConfig.name}) après ${maxRetries + 1} tentatives. Passage au port suivant...`);
+            break; // Sortir de la boucle while pour essayer le port suivant
+          }
+        }
+      }
+      
+      // Si on a réussi sur ce port, on ne continue pas
+      if (portSuccess) {
+        break;
+      }
+    }
+    
+    // Si tous les ports ont échoué, lancer la dernière erreur
+    if (lastError) {
+      throw lastError;
+    }
+    throw new Error('Échec de l\'envoi d\'email sur tous les ports');
   } catch (error) {
     console.error('❌ Erreur lors de l\'envoi de l\'email:', error.message);
-    
-
+    console.error('📋 Détails de l\'erreur:', {
+      code: error.code,
+      command: error.command,
+      response: error.response,
+    });
     
     // Ne pas faire échouer la création de commande si l'email échoue
     return { success: false, error: error.message };

@@ -7,6 +7,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import descImgProdRoutes from "./routes/descImgProdRoutes.js";
 
 dotenv.config();
 
@@ -30,8 +31,23 @@ const app = express();
 // Middlewares
 // Configuration CORS - permet toutes les origines en développement
 // Pour la production, vous pouvez restreindre aux origines de votre frontend
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+  : ['*'];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || '*', // '*' = toutes les origines, ou spécifiez votre URL frontend
+  origin: (origin, callback) => {
+    // En développement ou si FRONTEND_URL n'est pas défini, autoriser toutes les origines
+    if (allowedOrigins.includes('*') || !origin) {
+      callback(null, true);
+    } else if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Autoriser temporairement toutes les origines pour faciliter le déploiement
+      // Pour la production stricte, décommentez la ligne suivante :
+      // callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -43,7 +59,20 @@ connectDB();
 
 // Route test
 app.get("/", (req, res) => {
-  res.send("API Homeva fonctionne !");
+  res.json({ 
+    message: "API Homeva fonctionne !",
+    version: "1.0.0",
+    domain: process.env.RAILWAY_PUBLIC_DOMAIN || "localhost"
+  });
+});
+
+// Route health check pour Railway
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
 // Lancement du serveur
@@ -62,6 +91,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/desc-imgs", descImgProdRoutes);
 // Route statique pour les anciennes images locales (peut être supprimée après migration vers Cloudinary)
 app.use("/uploads", express.static("uploads"));
 

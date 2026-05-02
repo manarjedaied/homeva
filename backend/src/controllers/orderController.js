@@ -1,5 +1,6 @@
 import Order from "../models/Order.js";
 import { sendOrderNotification } from "../services/emailService.js";
+//import { sendPurchaseEvent } from "../services/metaCapiService.js";
 
 // GET /api/orders
 export const getOrders = async (req, res) => {
@@ -26,6 +27,11 @@ export const createOrder = async (req, res) => {
     sendOrderNotification(orderWithProduct).catch(err => {
       console.error('Erreur email (non bloquante):', err);
     });
+    
+    // Envoyer l'événement Purchase à Meta CAPI (en arrière-plan, ne bloque pas la réponse)
+    // sendPurchaseEvent(orderWithProduct, req).catch(err => {
+    //   console.error('Erreur Meta CAPI (non bloquante):', err);
+    // });
     
     res.status(201).json(savedOrder);
   } catch (error) {

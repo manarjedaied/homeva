@@ -140,6 +140,13 @@
     "title": "آراء العملاء",
     "subtitle": "ما يقوله عملاؤنا عنا",
     "verified": "عملية شراء موثقة"
+  },
+  "descriptiveImages": {
+    "loadingError": "خطأ في تحميل الصور",
+    "hero": "الصورة الرئيسية",
+    "lifestyle": "نمط الحياة",
+    "infographic": "مخطط معلومات",
+    "spec": "المواصفات",
+    "other": "أخرى"
   }
-
 }

@@ -21,6 +21,29 @@ export interface Product {
   createdAt?: string;
 }
 
+// Types pour les images descriptives de produits
+export type DescImgProdType = 'hero' | 'lifestyle' | 'infographic' | 'spec' | 'other';
+
+export interface DescImgProd {
+  _id: string;
+  productId: string;
+  url: string;
+  public_id: string;
+  alt?: string;
+  caption?: string | Record<string, string>;
+  type: DescImgProdType;
+  position: number;
+  isMain: boolean;
+  metadata?: {
+    width?: number;
+    height?: number;
+    size?: number;
+    format?: string;
+  };
+  variants?: Record<string, string>;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Types pour les commandes
 export interface Order {

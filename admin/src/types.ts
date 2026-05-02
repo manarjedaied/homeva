@@ -34,6 +34,31 @@ export interface Product {
   updatedAt?: string;
 }
 
+export type DescImgProdType = 'hero' | 'lifestyle' | 'infographic' | 'spec' | 'other';
+
+export interface DescImgProdMetadata {
+  width?: number;
+  height?: number;
+  size?: number;
+  format?: string;
+}
+
+export interface DescImgProd {
+  _id: string;
+  productId: string;
+  url: string;
+  public_id?: string;
+  alt?: string | null;
+  caption?: string | Record<string, string> | null;
+  type?: DescImgProdType;
+  position?: number;
+  isMain?: boolean;
+  metadata?: DescImgProdMetadata;
+  variants?: Record<string, string>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 // Types pour les commandes
 export interface Order {
   _id: string;

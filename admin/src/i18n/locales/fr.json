@@ -19,6 +19,7 @@
     "nav": {
       "dashboard": "Tableau de bord",
       "products": "Produits",
+      "descImages": "Images descriptives",
       "orders": "Commandes",
       "categories": "Catégories",
       "logout": "Déconnexion"
@@ -57,6 +58,31 @@
       "pourcentagePromo": "Pourcentage de promotion (%)",
       "stockLimite": "Stock limité",
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+    },
+    "descImages": {
+      "title": "Images descriptives",
+      "subtitle": "Gérez les images liées aux produits selon le contrat backend DescImgProd.",
+      "uploadTitle": "Ajouter des images descriptives",
+      "product": "Produit",
+      "chooseProduct": "Choisir un produit",
+      "files": "Fichiers images",
+      "filesHint": "Champ files, multi-upload supporté.",
+      "itemsTitle": "Paramètres par image",
+      "alt": "Texte alternatif",
+      "caption": "Légende",
+      "type": "Type",
+      "position": "Position",
+      "main": "Image principale",
+      "uploadButton": "Téléverser",
+      "galleryTitle": "Images du produit",
+      "gallerySubtitle": "Triées comme le backend: isMain puis position.",
+      "refresh": "Actualiser",
+      "empty": "Aucune image descriptive.",
+      "editTitle": "Modifier l'image",
+      "deleteConfirm": "Supprimer cette image ?",
+      "uploadSuccess": "Images ajoutées",
+      "updateSuccess": "Image mise à jour",
+      "deleteSuccess": "Image supprimée"
     },
     "categories": {
       "title": "Catégories produits",

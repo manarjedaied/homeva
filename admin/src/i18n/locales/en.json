@@ -19,6 +19,7 @@
     "nav": {
       "dashboard": "Dashboard",
       "products": "Products",
+      "descImages": "Description images",
       "orders": "Orders",
       "categories": "Categories",
       "logout": "Logout"
@@ -50,6 +51,31 @@
       "noCategories": "No categories available yet",
       "categoryHelp": "Add at least one category to enable selection.",
       "newCategoryPlaceholder": "New category name",
+    "descImages": {
+      "title": "Description images",
+      "subtitle": "Manage product images using the DescImgProd backend contract.",
+      "uploadTitle": "Add description images",
+      "product": "Product",
+      "chooseProduct": "Choose a product",
+      "files": "Image files",
+      "filesHint": "Field name: files, supports multiple uploads.",
+      "itemsTitle": "Per-image settings",
+      "alt": "Alt text",
+      "caption": "Caption",
+      "type": "Type",
+      "position": "Position",
+      "main": "Main image",
+      "uploadButton": "Upload",
+      "galleryTitle": "Product images",
+      "gallerySubtitle": "Sorted like backend: isMain then position.",
+      "refresh": "Refresh",
+      "empty": "No description images.",
+      "editTitle": "Edit image",
+      "deleteConfirm": "Delete this image?",
+      "uploadSuccess": "Images added",
+      "updateSuccess": "Image updated",
+      "deleteSuccess": "Image deleted"
+    },
       "inactiveLabel": "Inactive"
     },
     "dashboard": {

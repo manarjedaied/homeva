@@ -1,4 +1,5 @@
-import { Product, Order, Category } from '../types';
+import { Product, Order, Category, DescImgProd, DescImgProdType } from '../types';
+import Auth from '../utils/storage';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 //const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -14,6 +15,17 @@ export const getImageUrl = (imagePath: string | undefined | null): string => {
   // Le proxy redirigera automatiquement vers le backend
   return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
 };
+
+// Helper to join base URL and endpoint without duplicate segments
+function buildUrl(endpoint: string) {
+  const base = API_BASE_URL.replace(/\/+$/, ''); // remove trailing slashes
+  let ep = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  // If both base and endpoint contain '/api' segment at the junction, remove one
+  if (base.endsWith('/api') && ep.startsWith('/api')) {
+    ep = ep.replace(/^\/api/, '');
+  }
+  return `${base}${ep}`;
+}
 
 // Fonction utilitaire pour les appels API
 async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -33,7 +45,7 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise
     };
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const response = await fetch(buildUrl(endpoint), {
     body,
     headers,
     ...rest,
@@ -56,15 +68,61 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise
   return response.json();
 }
 
+async function fetchAdminAPI<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const token = Auth.getRefresh();
+  if (!token) {
+    throw new Error('Refresh token manquant');
+  }
+
+  const { body, headers: incomingHeaders, ...rest } = options;
+  const isFormData = body instanceof FormData;
+
+  let headers: HeadersInit;
+  if (incomingHeaders instanceof Headers) {
+    if (!isFormData && !incomingHeaders.has('Content-Type')) {
+      incomingHeaders.set('Content-Type', 'application/json');
+    }
+    incomingHeaders.set('Authorization', `Bearer ${token}`);
+    headers = incomingHeaders;
+  } else {
+    headers = {
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+      Authorization: `Bearer ${token}`,
+      ...(incomingHeaders || {}),
+    };
+  }
+
+  const response = await fetch(buildUrl(endpoint), {
+    body,
+    headers,
+    ...rest,
+  });
+
+  if (!response.ok) {
+    let errorMessage = response.statusText;
+    try {
+      const errorData = await response.json();
+      if (errorData.message) {
+        errorMessage = errorData.message;
+      }
+    } catch {
+      // ignore non-JSON error payloads
+    }
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+}
+
 // API Admin
 export const adminAPI = {
   login: (email: string, password: string) =>
-    fetchAPI('/admin/login', {
+    fetchAPI('/api/admin/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),
 refresh: (refreshToken: string) =>
-    fetchAPI('/admin/refresh', {
+    fetchAPI('/api/admin/refresh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }, // important
       body: JSON.stringify({ refreshToken }), // clé exactement comme attendue par le backend
@@ -72,7 +130,7 @@ refresh: (refreshToken: string) =>
 
 
   logout: () =>
-    fetchAPI('/admin/logout', { method: 'POST' }),
+    fetchAPI('/api/admin/logout', { method: 'POST' }),
 };
 
 
@@ -155,6 +213,33 @@ export const adminSettingsAPI = {
     fetchAPI<Settings>('/settings', {
       method: 'PUT',
       body: JSON.stringify(settings),
+    }),
+};
+
+export interface DescImgProdUploadItem {
+  alt?: string;
+  caption?: string;
+  type?: DescImgProdType;
+  position?: number;
+  isMain?: boolean;
+}
+
+export const adminDescImgAPI = {
+  getByProduct: (productId: string): Promise<DescImgProd[]> =>
+    fetchAPI<DescImgProd[]>(`/desc-imgs/product/${productId}`),
+  upload: (formData: FormData): Promise<{ message: string; count: number; images: DescImgProd[] }> =>
+    fetchAdminAPI<{ message: string; count: number; images: DescImgProd[] }>('/desc-imgs', {
+      method: 'POST',
+      body: formData,
+    }),
+  update: (id: string, payload: Partial<DescImgProd>): Promise<DescImgProd> =>
+    fetchAdminAPI<DescImgProd>(`/desc-imgs/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+  delete: (id: string): Promise<{ message: string }> =>
+    fetchAdminAPI<{ message: string }>(`/desc-imgs/${id}`, {
+      method: 'DELETE',
     }),
 };
 

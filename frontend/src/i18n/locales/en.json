@@ -140,6 +140,13 @@
     "title": "Customer reviews",
     "subtitle": "What our customers say about us",
     "verified": "Verified purchase"
+  },
+  "descriptiveImages": {
+    "loadingError": "Error loading images",
+    "hero": "Main image",
+    "lifestyle": "Lifestyle",
+    "infographic": "Infographic",
+    "spec": "Specifications",
+    "other": "Other"
   }
-
 }

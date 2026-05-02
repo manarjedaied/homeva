@@ -140,6 +140,13 @@
     "title": "Avis clients",
     "subtitle": "Ce que nos clients disent de nous",
     "verified": "Achat vérifié"
+  },
+  "descriptiveImages": {
+    "loadingError": "Erreur lors du chargement des images",
+    "hero": "Image principale",
+    "lifestyle": "Style de vie",
+    "infographic": "Infographie",
+    "spec": "Spécifications",
+    "other": "Autre"
   }
-
 }
