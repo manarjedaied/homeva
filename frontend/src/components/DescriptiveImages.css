@@ -4,6 +4,8 @@
   margin-top: 0;
   margin-bottom: 2rem;
   padding-top: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .descriptive-images.loading {
@@ -21,13 +23,38 @@
   margin-bottom: 0.5rem;
 }
 
+.hero-image-wrapper {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 .hero-image {
   display: block;
-  margin: 0 auto;
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: none;
-  object-fit: none;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Rounded corners for cards and thumbnails */
+.image-card {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 /* Other images: flow naturally without boxes */
@@ -36,10 +63,10 @@
 }
 
 .images-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 1rem;
-  align-items: flex-start;
+  align-items: start;
 }
 
 .image-card {
@@ -53,9 +80,10 @@
 
 .card-image {
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
   max-width: 100%;
+  object-fit: cover;
 }
 
 .image-caption {

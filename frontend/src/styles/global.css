@@ -1090,7 +1090,8 @@ body {
 
 .product-details-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Make the images column larger so it doesn't collapse when extra content appears */
+  grid-template-columns: 55% 45%;
   gap: 3rem;
   margin-top: 2rem;
 }
@@ -1099,6 +1100,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+/* Ensure images column keeps a sensible minimum width */
+.product-images-section {
+  min-width: 320px;
 }
 
 .main-image-wrapper {
